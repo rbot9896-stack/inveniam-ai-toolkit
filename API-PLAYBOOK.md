@@ -6,7 +6,7 @@ provisioning quirks, tool-name mapping; maintained at
 https://github.com/aberdellans/Agent_skill). It is your working reference
 for anything involving the Inveniam platform: how to call the API, what comes
 back, the quirks that waste calls, and step-by-step recipes for the things
-people ask for. Last verified 2026-09-24.
+people ask for. Last verified 2026-09-24. Canonical copy: https://raw.githubusercontent.com/rbot9896-stack/inveniam-ai-toolkit/main/API-PLAYBOOK.md (repo https://github.com/rbot9896-stack/inveniam-ai-toolkit).
 
 ---
 

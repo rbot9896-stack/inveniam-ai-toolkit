@@ -8,9 +8,12 @@ number clicks through to the document it came from. One deal (The Meridian, in
 the sales environment) is included as a worked example; the point is the
 capability, not that deal.
 
-**How to use it.** Paste this file into a new conversation with Claude or
-ChatGPT — or attach the whole toolkit folder — and say *"Walk me through this
-setup."* The assistant asks a few questions and takes you through it one step at
+**How to use it.** In a new conversation with Claude or ChatGPT, paste:
+
+> Read https://raw.githubusercontent.com/rbot9896-stack/inveniam-ai-toolkit/main/START-HERE.md and walk me through the setup.
+
+(or paste this file's contents, or attach the toolkit folder).
+Repository: https://github.com/rbot9896-stack/inveniam-ai-toolkit · maintained skill: https://github.com/aberdellans/Agent_skill The assistant asks a few questions and takes you through it one step at
 a time. You do two things yourself: create API credentials on the Inveniam
 website and paste them into a terminal window once. Nothing sensitive goes into
 the chat.
@@ -38,7 +41,7 @@ You are guiding someone who may not be technical. For the whole conversation:
    computer you can create folders, copy files and run commands — do that rather
    than dictating. Otherwise give the exact command to paste and ask what came
    back.
-6. **When setup is complete, read `API-PLAYBOOK.md` and `skill/inveniam/SKILL.md`** in the toolkit. It is
+6. **When setup is complete, read `API-PLAYBOOK.md` and `skill/inveniam/SKILL.md`** in the toolkit (or from https://raw.githubusercontent.com/rbot9896-stack/inveniam-ai-toolkit/main/API-PLAYBOOK.md and https://raw.githubusercontent.com/rbot9896-stack/inveniam-ai-toolkit/main/skill/inveniam/SKILL.md if you can't see the folder). It is
    written for you: how to call the API, what every endpoint returns, the
    quirks, and step-by-step recipes for the capabilities. From then on, that is
    your reference for anything Inveniam-related.
@@ -85,8 +88,17 @@ New-Item -ItemType Directory -Force "$env:USERPROFILE\dev\inveniam" | Out-Null; 
 ```
 Expected: `created`.
 
-Then unzip `inveniam-ai-toolkit.zip` and copy its **contents** into that base
-folder, so you end up with `~/dev/inveniam/inv.sh`, `~/dev/inveniam/tools/…`,
+Then get the toolkit files into that base folder. Easiest, if `git` is present
+(Mac: yes; Windows: inside Claude Cowork's shell, yes):
+
+```
+git clone https://github.com/rbot9896-stack/inveniam-ai-toolkit.git ~/dev/inveniam/toolkit && cp -R ~/dev/inveniam/toolkit/. ~/dev/inveniam/ && rm -rf ~/dev/inveniam/toolkit
+```
+(Windows PowerShell without git: download the zip from https://github.com/rbot9896-stack/inveniam-ai-toolkit
+→ green **Code** button → Download ZIP, unzip, and copy its **contents** into
+`%USERPROFILE%\dev\inveniam`.)
+
+You end up with `~/dev/inveniam/inv.sh`, `~/dev/inveniam/tools/…`,
 `~/dev/inveniam/examples/…`, `~/dev/inveniam/API-PLAYBOOK.md`.
 
 Check — Mac: `ls ~/dev/inveniam ~/dev/inveniam/tools` · Windows:
