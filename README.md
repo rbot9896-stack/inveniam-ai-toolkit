@@ -16,7 +16,11 @@ endpoints and recipes, helper scripts, the platform skill, and one worked exampl
 | `inv.sh`, `tools/` | API helper; pull any deal, summarise inventory / extraction / anchoring |
 | `examples/meridian/` | worked example: a provenance dashboard where every figure links to its source field |
 
-Get the files: `git clone https://github.com/rbot9896-stack/inveniam-ai-toolkit.git ~/dev/inveniam/inveniam-ai-toolkit` or download the zip from the green **Code** button.
+Get the files — either:
+- `git clone https://github.com/rbot9896-stack/inveniam-ai-toolkit.git ~/dev/inveniam` (then `git pull` for updates), or
+- green **Code → Download ZIP**, unzip, rename the folder to `inveniam` and put it in `~/dev`.
+
+Either way the files must sit directly in `~/dev/inveniam` (`inv.sh`, `tools/`, …); `START-HERE.md` §2 walks through it.
 
 No credentials are in this repository. They live only in `.env` files on each
 user's own computer, created during setup.

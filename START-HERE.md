@@ -12,11 +12,14 @@ capability, not that deal.
 
 > Read https://raw.githubusercontent.com/rbot9896-stack/inveniam-ai-toolkit/main/START-HERE.md and walk me through the setup.
 
-(or paste this file's contents, or attach the toolkit folder).
-Repository: https://github.com/rbot9896-stack/inveniam-ai-toolkit · maintained skill: https://github.com/aberdellans/Agent_skill The assistant asks a few questions and takes you through it one step at
-a time. You do two things yourself: create API credentials on the Inveniam
-website and paste them into a terminal window once. Nothing sensitive goes into
-the chat.
+(or paste this file's contents, or attach the toolkit folder). The assistant
+asks a few questions and takes you through it one step at a time. You do two
+things yourself: create API credentials on the Inveniam website and paste them
+into a terminal window once. Nothing sensitive goes into the chat.
+
+Repository: https://github.com/rbot9896-stack/inveniam-ai-toolkit (public, no
+credentials inside — updates land here, so prefer it over an emailed zip).
+Maintained platform skill: https://github.com/aberdellans/Agent_skill
 
 Prepared by Ryder Desenberg (Inveniam), 2026-09-24.
 
@@ -78,33 +81,44 @@ Summarise the plan in three lines, then start.
 | Claude skill | `~/dev/inveniam/skill/inveniam/SKILL.md` (installed in §5b) | same |
 | Credentials | `~/dev/inveniam/.env.sales`, `~/dev/inveniam/.env` | same names, same folder |
 
-**Mac — Terminal** (Spotlight → "Terminal"):
+Pick **one** of the two ways below. Both end with the toolkit's files sitting
+directly in the base folder (no extra folder in between).
+
+**Option A — `git clone` (preferred: `git pull` later picks up updates).**
+
+Mac — Terminal (Spotlight → "Terminal"). If it asks to install the command-line
+developer tools, click *Install*, wait, then run the line again:
 ```zsh
-mkdir -p ~/dev/inveniam && echo created
+mkdir -p ~/dev && git clone https://github.com/rbot9896-stack/inveniam-ai-toolkit.git ~/dev/inveniam && echo cloned
 ```
-**Windows — PowerShell** (Start → "PowerShell"):
+Windows — PowerShell (Start → "PowerShell"). Needs Git for Windows
+(https://git-scm.com/download/win, defaults are fine; reopen PowerShell after):
 ```powershell
-New-Item -ItemType Directory -Force "$env:USERPROFILE\dev\inveniam" | Out-Null; "created"
+New-Item -ItemType Directory -Force "$env:USERPROFILE\dev" | Out-Null; git clone https://github.com/rbot9896-stack/inveniam-ai-toolkit.git "$env:USERPROFILE\dev\inveniam"; "cloned"
 ```
-Expected: `created`.
+Expected: `cloned`. If it says the destination already exists and is not empty,
+rename the old `inveniam` folder aside and run it again, or use Option B.
 
-Then get the toolkit files into that base folder. Easiest, if `git` is present
-(Mac: yes; Windows: inside Claude Cowork's shell, yes):
+If you are Claude in Cowork with the computer linked, run the clone yourself,
+then ask the user to **Add folder** → `dev/inveniam` so you can see it.
 
-```
-git clone https://github.com/rbot9896-stack/inveniam-ai-toolkit.git ~/dev/inveniam/toolkit && cp -R ~/dev/inveniam/toolkit/. ~/dev/inveniam/ && rm -rf ~/dev/inveniam/toolkit
-```
-(Windows PowerShell without git: download the zip from https://github.com/rbot9896-stack/inveniam-ai-toolkit
-→ green **Code** button → Download ZIP, unzip, and copy its **contents** into
-`%USERPROFILE%\dev\inveniam`.)
+**Option B — Download ZIP (no git needed).**
+1. Open https://github.com/rbot9896-stack/inveniam-ai-toolkit → green **Code**
+   button → **Download ZIP**.
+2. Unzip it. The folder is called `inveniam-ai-toolkit-main`.
+3. Rename that folder to `inveniam` and move it into a `dev` folder in your home
+   folder — Mac: `/Users/<you>/dev/inveniam`; Windows: `C:\Users\<you>\dev\inveniam`.
+   Create `dev` if it isn't there.
 
-You end up with `~/dev/inveniam/inv.sh`, `~/dev/inveniam/tools/…`,
-`~/dev/inveniam/examples/…`, `~/dev/inveniam/API-PLAYBOOK.md`.
-
-Check — Mac: `ls ~/dev/inveniam ~/dev/inveniam/tools` · Windows:
+**Check** — Mac: `ls ~/dev/inveniam ~/dev/inveniam/tools` · Windows:
 `Get-ChildItem "$env:USERPROFILE\dev\inveniam" -Recurse -Name`
-Expected: `inv.sh`, `API-PLAYBOOK.md`, `START-HERE.md`, a `tools` folder with
-`fetch_deal.sh` and `deal_summary.py`, an `examples` folder, a `skill` folder.
+Expected: `inv.sh`, `API-PLAYBOOK.md`, `START-HERE.md`, `README.md`, a `tools`
+folder with `fetch_deal.sh` and `deal_summary.py`, an `examples` folder, a
+`skill` folder — and **no** `inveniam-ai-toolkit-main` folder nested inside.
+
+**Updating later** — Option A: `cd ~/dev/inveniam && git pull`. Option B:
+download again and replace the files. Your `.env` credential files are not in
+the download and are left untouched either way.
 
 Windows note: the helpers are bash/Python. Inside Claude Cowork they run
 unchanged, because Cowork's shell is a Linux environment that mounts this
