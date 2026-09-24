@@ -1,0 +1,428 @@
+<title>The Meridian Deal Room</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#EEF0F3;--surface:#FFFFFF;--surface2:#F6F7F9;--line:#D9DDE4;--line2:#E9ECF0;
+  --ink:#141E33;--ink2:#404A5E;--muted:#6B7386;
+  --accent:#0F5C8C;--accent-ink:#FFFFFF;--accent-soft:#E3EEF6;
+  --s1:#0F5C8C;--s2:#C8843A;--s1-soft:rgba(15,92,140,.14);
+  --good:#2E7D4F;--warn:#B26A00;--crit:#B3261E;--good-soft:#E3F1E8;--warn-soft:#FBEEDB;--crit-soft:#F9E3E1;
+  --shadow:0 1px 2px rgba(20,30,51,.06),0 6px 20px -8px rgba(20,30,51,.12);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;--bg:#0F1521;--surface:#18202D;--surface2:#1F2836;--line:#2E3847;--line2:#263040;
+  --ink:#E8ECF2;--ink2:#C0C7D4;--muted:#8E98AB;--accent:#3D8FD6;--accent-ink:#0F1521;--accent-soft:#1B2E44;
+  --s1:#3D8FD6;--s2:#B87C34;--s1-soft:rgba(61,143,214,.18);
+  --good:#5FBF83;--warn:#E0A458;--crit:#EF7B72;--good-soft:#173124;--warn-soft:#3A2A12;--crit-soft:#3C1E1C;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -10px rgba(0,0,0,.5);}}
+:root[data-theme="dark"]{
+  color-scheme:dark;--bg:#0F1521;--surface:#18202D;--surface2:#1F2836;--line:#2E3847;--line2:#263040;
+  --ink:#E8ECF2;--ink2:#C0C7D4;--muted:#8E98AB;--accent:#3D8FD6;--accent-ink:#0F1521;--accent-soft:#1B2E44;
+  --s1:#3D8FD6;--s2:#B87C34;--s1-soft:rgba(61,143,214,.18);
+  --good:#5FBF83;--warn:#E0A458;--crit:#EF7B72;--good-soft:#173124;--warn-soft:#3A2A12;--crit-soft:#3C1E1C;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -10px rgba(0,0,0,.5);}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1280px;margin:0 auto;padding-inline:20px;padding-block:0 48px}
+h1,h2,h3{font-family:"Source Serif 4",Georgia,"Times New Roman",serif;font-weight:600;text-wrap:balance;margin:0}
+h2{font-size:20px;letter-spacing:-.01em}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line);}
+.top .in{max-width:1280px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.top h1{font-size:18px}
+.top .sym{font-size:12px;color:var(--muted);font-family:"Instrument Sans",sans-serif;font-weight:500}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:600;letter-spacing:.02em;border:1px solid var(--line);background:var(--surface2);color:var(--ink2)}
+.pill.good{background:var(--good-soft);color:var(--good);border-color:transparent}
+.pill.env{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.top nav{margin-left:auto;display:flex;gap:2px;flex-wrap:wrap}
+.top nav a{text-decoration:none;font-size:12.5px;font-weight:500;color:var(--ink2);padding:5px 9px;border-radius:6px}
+.top nav a:hover{background:var(--surface2);color:var(--ink)}
+/* hero */
+.hero{display:grid;grid-template-columns:1fr;gap:24px;padding-block:26px 8px;align-items:start}
+.hero p{margin:8px 0 0;color:var(--ink2);max-width:78ch;font-size:14.5px}
+.hero .facts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px 24px;font-size:13px;margin-top:16px}
+.hero .facts div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line2);padding-bottom:5px}
+.hero .facts span:first-child{color:var(--muted)}
+/* kpis */
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:18px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px 11px;box-shadow:var(--shadow)}
+.kpi .eyebrow{margin-bottom:6px}
+.kpi .v{font-family:"Source Serif 4",Georgia,serif;font-size:24px;font-weight:600;letter-spacing:-.01em;line-height:1.1}
+.kpi .sub{font-size:12px;color:var(--muted);margin-top:5px}
+.kpi .delta{font-weight:600}
+.up{color:var(--good)}.down{color:var(--crit)}.flat{color:var(--muted)}
+/* sections */
+section{margin-top:30px}
+.sec-h{display:flex;align-items:baseline;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.sec-h .src{font-size:12px;color:var(--muted);margin-left:auto}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;box-shadow:var(--shadow)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.card h3{font-size:15px;margin-bottom:2px}
+.card .cap{font-size:12px;color:var(--muted);margin-bottom:8px}
+/* cell links */
+a.cell{text-decoration:none;color:inherit;border-bottom:1px dotted color-mix(in srgb,var(--accent) 55%,transparent);position:relative;cursor:pointer;padding-bottom:1px}
+a.cell:hover,a.cell:focus-visible{background:var(--accent-soft);border-bottom-style:solid;border-bottom-color:var(--accent);outline:none;border-radius:2px}
+a.cell::after{content:"";}
+.none{color:var(--muted);font-style:italic}
+/* tables */
+.tbl{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:6px 10px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface)}
+td{padding:7px 10px;border-bottom:1px solid var(--line2);vertical-align:top;white-space:nowrap}
+td.r,th.r{text-align:right}
+tr.total td{font-weight:600;border-top:1px solid var(--line);background:var(--surface2)}
+tr.head td{font-weight:600;color:var(--ink2);padding-top:12px;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+tr.vac td{color:var(--warn)}
+tbody tr:hover td{background:var(--surface2)}
+th.sticky,td.sticky{position:sticky;left:0;background:var(--surface);z-index:1;min-width:190px;white-space:normal}
+tbody tr:hover td.sticky{background:var(--surface2)}
+/* tenant rows */
+tr.tenant{cursor:pointer}
+tr.tenant td:first-child::before{content:"▸";display:inline-block;width:14px;color:var(--muted);transition:transform .15s}
+tr.tenant.open td:first-child::before{transform:rotate(90deg)}
+tr.detail td{background:var(--surface2);white-space:normal;padding:10px 14px 12px 34px}
+tr.detail[hidden]{display:none}
+.sched{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px 14px;font-size:12.5px;margin-top:8px}
+.sched div{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line2);padding-bottom:3px}
+.sched div.cur{font-weight:600;color:var(--accent)}
+.sched span:first-child{color:var(--muted)}
+.sfbar{height:8px;border-radius:4px;background:var(--s1);display:inline-block;vertical-align:middle}
+/* charts */
+.chart{width:100%;height:auto;display:block;overflow:visible}
+.chart text{font-family:"Instrument Sans",sans-serif;font-size:11px;fill:var(--muted)}
+.chart .grid{stroke:var(--line2);stroke-width:1}
+.chart .axis{stroke:var(--line);stroke-width:1}
+.chart .lbl{fill:var(--ink);font-weight:600;font-size:11.5px}
+.chart .line{fill:none;stroke:var(--s1);stroke-width:2;stroke-linejoin:round}
+.chart .area{fill:var(--s1-soft)}
+.chart .dot{fill:var(--s1);stroke:var(--surface);stroke-width:2}
+.chart .bar{fill:var(--s1)}
+.chart .bar2{fill:var(--s2)}
+.chart a .bar:hover,.chart a .bar2:hover,.chart a .dot:hover{opacity:.75}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--ink2);margin-top:6px;flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+/* loan */
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px 22px}
+.kv div{display:flex;flex-direction:column;gap:2px;border-bottom:1px solid var(--line2);padding-bottom:7px}
+.kv span:first-child{font-size:11.5px;color:var(--muted)}
+.kv .long{grid-column:1/-1}
+.kv .long span:last-child{white-space:normal;font-size:13px;color:var(--ink2)}
+/* data room */
+.folders{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
+.folder{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;box-shadow:var(--shadow)}
+.folder h3{font-size:14px;display:flex;justify-content:space-between;align-items:baseline}
+.folder h3 small{font-size:11.5px;color:var(--muted);font-weight:500;font-family:"Instrument Sans",sans-serif}
+.folder ul{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:5px}
+.folder li{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;font-size:12.5px}
+.folder li>a{text-decoration:none;color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.folder li>a:hover{color:var(--accent);text-decoration:underline}
+.chip{font-size:10.5px;font-weight:600;padding:1px 6px;border-radius:999px;background:var(--accent-soft);color:var(--accent);white-space:nowrap}
+.chip.none{background:var(--surface2);color:var(--muted);font-style:normal}
+.flag{display:inline-flex;align-items:center;gap:4px}
+.flag .warnb{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--warn-soft);color:var(--warn);font-size:10px;font-weight:700;line-height:1;cursor:help;flex:none}
+.notes{border-left:3px solid var(--warn);background:var(--warn-soft);border-radius:8px;padding:12px 16px;margin-top:14px;font-size:13px}
+.notes h3{font-size:14px;color:var(--warn);margin-bottom:6px;font-family:"Instrument Sans",sans-serif;font-weight:600}
+.notes ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+.notes li{color:var(--ink2)}
+.anch{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--good-soft);color:var(--good);font-size:11px;font-weight:700;flex:none;cursor:pointer;border:none;padding:0;font-family:inherit}
+.anch.part{background:var(--warn-soft);color:var(--warn)}
+.anch:hover,.anch:focus-visible{outline:2px solid var(--good);outline-offset:1px}
+.anch.part:hover,.anch.part:focus-visible{outline-color:var(--warn)}
+.anchd{grid-column:1/-1;background:var(--surface2);border-radius:6px;padding:8px 10px;margin:2px 0 4px 0;font-size:11.5px;overflow-x:auto;min-width:0}
+.anchd[hidden]{display:none}
+.anchd table{font-size:11.5px}.anchd td,.anchd th{padding:3px 8px;white-space:nowrap}
+.anchd td.tx{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;color:var(--ink2)}
+.anchd .ok{color:var(--good);font-weight:600}.anchd .pend{color:var(--warn);font-weight:600}
+.anchd a{color:var(--accent)}
+/* footer */
+footer{margin-top:36px;padding-top:14px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:8px 22px}
+.tip{position:fixed;z-index:50;pointer-events:none;background:var(--ink);color:var(--bg);font-size:11.5px;padding:6px 9px;border-radius:6px;max-width:320px;box-shadow:var(--shadow);opacity:0;transition:opacity .1s}
+.tip b{display:block;font-weight:600;margin-bottom:1px}
+@media (max-width:980px){.kpis{grid-template-columns:repeat(3,1fr)}.grid3{grid-template-columns:1fr}.hero .facts{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:640px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.hero .facts{grid-template-columns:1fr}.top nav{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="top"><div class="in">
+  <h1 id="ttl">The Meridian</h1><span class="sym num" id="sym"></span>
+  <span class="pill good" id="status"></span><span class="pill env">Sales environment</span>
+  <nav><a href="#trend">Trend</a><a href="#tenants">Tenants</a><a href="#income">Income</a><a href="#balance">Balance sheet</a><a href="#loan">Loan</a><a href="#appraisal">Appraisal</a><a href="#dataroom">Data room</a></nav>
+</div></div>
+
+<div class="wrap">
+  <div class="hero">
+    <div>
+      <div class="eyebrow" id="typeline"></div>
+      <h2 style="font-size:26px;margin-top:4px" id="addr"></h2>
+      <p id="desc"></p>
+      <div class="facts" id="facts"></div>
+    </div>
+  </div>
+  <div class="kpis" id="kpis"></div>
+
+  <section id="trend">
+    <div class="sec-h"><h2>Four-quarter trend</h2><span class="src">Appraisals · income statements · balance sheets, Q3 2025 – Q2 2026</span></div>
+    <div class="grid3">
+      <div class="card"><h3>Appraised value</h3><div class="cap">As-is value conclusion, each quarter's appraisal</div><div id="c-value"></div></div>
+      <div class="card"><h3>Trailing-twelve-month NOI</h3><div class="cap">TTM NOI reported in each quarter's income statement</div><div id="c-noi"></div></div>
+      <div class="card"><h3>Occupancy &amp; WALT</h3><div class="cap">From each quarter's appraisal</div><div id="c-occ"></div></div>
+    </div>
+    <div class="card tbl" style="margin-top:14px"><table id="t-trend"></table></div>
+    <div class="notes" id="notes" hidden></div>
+  </section>
+
+  <section id="tenants">
+    <div class="sec-h"><h2>Rent roll &amp; leases</h2><span class="src" id="rr-src"></span></div>
+    <div class="card tbl"><table id="t-tenants"></table><div class="cap" style="margin-top:8px">Click a tenant to open its lease abstract and rent schedule. Current-period rent is the schedule year containing the rent roll date.</div></div>
+  </section>
+
+  <section id="income">
+    <div class="sec-h"><h2>Income statement</h2><span class="src" id="is-src"></span></div>
+    <div class="grid2">
+      <div class="card"><h3>Monthly NOI</h3><div class="cap">Net operating income by month, TTM ended Q2 2026</div><div id="c-mnoi"></div></div>
+      <div class="card"><h3>TTM waterfall</h3><div class="cap">Revenue to distributions, TTM ended Q2 2026</div><div id="c-wf"></div></div>
+    </div>
+    <div class="card tbl" style="margin-top:14px"><table id="t-is"></table></div>
+  </section>
+
+  <section id="balance">
+    <div class="sec-h"><h2>Balance sheet</h2><span class="src" id="bs-src"></span></div>
+    <div class="card tbl"><table id="t-bs"></table></div>
+  </section>
+
+  <section id="loan">
+    <div class="sec-h"><h2>Loan terms</h2><span class="src">Loan Agreement &amp; Promissory Note</span></div>
+    <div class="card"><div class="kv" id="loan-kv"></div></div>
+  </section>
+
+  <section id="appraisal">
+    <div class="sec-h"><h2>Appraisal detail</h2><span class="src" id="ap-src"></span></div>
+    <div class="grid2">
+      <div class="card"><h3>Projected NOI</h3><div class="cap">Appraiser's 11-year income projection (fiscal years from July)</div><div id="c-proj"></div></div>
+      <div class="card"><h3>Underwriting &amp; tax</h3><div class="cap">Assumptions behind the value conclusion</div><div class="kv" id="uw-kv"></div></div>
+    </div>
+    <div class="card tbl" style="margin-top:14px"><h3>Sales comparables</h3><table id="t-comps"></table></div>
+  </section>
+
+  <section id="dataroom">
+    <div class="sec-h"><h2>Data room</h2><span class="src" id="dr-src"></span></div>
+    <div class="folders" id="folders"></div>
+  </section>
+
+  <footer id="foot"></footer>
+</div>
+<div class="tip" id="tip"></div>
+
+<script>
+const DATA = __DATA__;
+const HOST = "__HOST__";           // viewer host used for every link
+const RAW  = "https://sales-v1.inveniam.io";
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const docName = {}; DATA.dataroom.forEach(d => docName[d.id] = d.name);
+const fix = u => u ? u.replace(RAW, HOST) : u;
+const docUrl = id => `${HOST}/view-file/${id}?id=${DATA.deal.id}`;
+const num = s => { if (s == null) return null; const t = String(s).replace(/[$,%\s]/g,'').replace(/^\((.*)\)$/,'-$1'); const n = parseFloat(t); return isNaN(n) ? null : n; };
+const fmtM = n => n == null ? '—' : (Math.abs(n) >= 1e6 ? '$' + (n/1e6).toFixed(n%1e6===0?0:1) + 'M' : '$' + Math.round(n/1e3) + 'K');
+const fmtK = n => n == null ? '—' : '$' + (n/1e3).toFixed(0) + 'K';
+
+// A cell = a value that opens the exact field in the Inveniam viewer.
+const FLAGS = new Map((DATA.flags || []).map(f => [f.summary.u, f]));
+function L(c, opts = {}) {
+  if (!c || c.v == null || c.v === '') return `<span class="none">${opts.empty ?? 'not extracted'}</span>`;
+  const f = c.u && FLAGS.get(c.u);
+  if (f && !opts.noflag) return `<span class="flag">${L(c, {...opts, noflag: true})}<span class="warnb" title="Extraction flag: this Summary value matches the ${f.matches_col || 'wrong'} column of the statement, not ${f.detail_col}. Detail table shows ${f.detail.v}.">!</span></span>`;
+  const txt = opts.text ?? c.v;
+  if (!c.u) return `<span class="num">${esc(txt)}</span>`;
+  return `<a class="cell num" href="${esc(fix(c.u))}" target="_blank" rel="noopener" data-doc="${esc(docName[c.d] || '')}" data-page="${c.p ?? ''}" data-val="${esc(c.v)}">${esc(txt)}</a>`;
+}
+
+// ---------- header / hero ----------
+const D = DATA.deal, K = DATA.kpi;
+$('#sym').textContent = '#' + D.symbol; $('#status').textContent = D.status;
+$('#typeline').textContent = `${D.type} · ${K['Building Use Type']?.v || ''}`;
+$('#addr').innerHTML = L(K['Address']);
+$('#desc').textContent = D.description;
+$('#facts').innerHTML = [
+  ['Net rentable area', L(K['Net Rentable Area'])], ['Stories', L(K['Number of Stories'])],
+  ['Built / renovated', L(K['Year Built']) + ' / ' + L(K['Year Renovated'])], ['Condition', L(K['Building Condition'])],
+  ['Tenants', L(K['Number of Units'])], ['Largest tenant', L(K['Largest Tenant']) + ' · ' + L(K['Largest Tenant (SF)'])],
+  ['Submarket', L(K['Market Submarket'])], ['Appraiser', L(K['Prepared By'])],
+].map(([k,v]) => `<div><span>${k}</span><span>${v}</span></div>`).join('');
+
+// ---------- KPIs ----------
+const Qs = DATA.quarters, last = Qs[3], prev = Qs[2];
+function delta(a, b, pct = true) {
+  const x = num(a?.v), y = num(b?.v); if (x == null || y == null) return '';
+  const d = pct ? (x - y) / Math.abs(y) * 100 : x - y; const cls = d > 0.05 ? 'up' : d < -0.05 ? 'down' : 'flat';
+  const s = cls === 'flat' ? 'unchanged' : pct ? `${d >= 0 ? '+' : ''}${d.toFixed(1)}%` : `${d >= 0 ? '+' : ''}${d.toFixed(2)}`;
+  return `<span class="delta ${cls}">${s}</span> vs ${prev.q}`;
+}
+$('#kpis').innerHTML = [
+  ['Appraised value', L(last.value), delta(last.value, prev.value)],
+  ['Cap rate', L(last.cap), 'as of ' + L(K['Effective Date'])],
+  ['Value / SF', L(last.psf), delta(last.psf, prev.psf)],
+  ['TTM NOI', L(last.noi), delta(last.noi, prev.noi)],
+  ['Occupancy', L(last.occ), 'WALT ' + L(last.walt)],
+  ['Debt', L(last.debt), 'equity ' + L(last.equity)],
+].map(([k,v,s]) => `<div class="kpi"><div class="eyebrow">${k}</div><div class="v">${v}</div><div class="sub">${s}</div></div>`).join('');
+
+// ---------- charts (inline SVG, one scale each) ----------
+function barChart(el, pts, {h=170, fmt=fmtM, cls='bar'} = {}) {
+  const w = 420, pl = 8, pr = 8, pt = 22, pb = 26, iw = w - pl - pr, ih = h - pt - pb;
+  const vals = pts.map(p => p.n ?? 0), mx = Math.max(...vals) * 1.08 || 1;
+  const bw = Math.min(56, iw / pts.length - 8), step = iw / pts.length;
+  let s = `<svg class="chart" viewBox="0 0 ${w} ${h}" role="img">`;
+  [0.25,0.5,0.75,1].forEach(g => { const y = pt + ih - ih*g; s += `<line class="grid" x1="${pl}" x2="${w-pr}" y1="${y}" y2="${y}"/>`; });
+  s += `<line class="axis" x1="${pl}" x2="${w-pr}" y1="${pt+ih}" y2="${pt+ih}"/>`;
+  pts.forEach((p, i) => {
+    const x = pl + step*i + (step-bw)/2, bh = Math.max(0, (p.n ?? 0)/mx*ih), y = pt + ih - bh;
+    const bar = `<rect class="${p.cls||cls}" x="${x}" y="${y}" width="${bw}" height="${bh}" rx="3"/>`;
+    s += p.u ? `<a href="${esc(fix(p.u))}" target="_blank" rel="noopener"><title>${esc(p.label)}: ${esc(p.raw)} — open field</title>${bar}</a>` : bar;
+    if (p.n != null) s += `<text class="lbl" x="${x+bw/2}" y="${y-5}" text-anchor="middle">${fmt(p.n)}</text>`;
+    s += `<text x="${x+bw/2}" y="${h-8}" text-anchor="middle">${esc(p.label)}</text>`;
+  });
+  el.innerHTML = s + '</svg>';
+}
+function lineChart(el, pts, {h=170, fmt=fmtM, pad=0.15, unit=''} = {}) {
+  const w = 420, pl = 10, pr = 10, pt = 22, pb = 26, iw = w - pl - pr, ih = h - pt - pb;
+  const vals = pts.map(p => p.n).filter(v => v != null), mn0 = Math.min(...vals), mx0 = Math.max(...vals);
+  const span = (mx0 - mn0) || Math.abs(mx0) * 0.1 || 1, mn = mn0 - span*pad, mx = mx0 + span*pad;
+  const X = i => pl + (pts.length === 1 ? iw/2 : iw * i/(pts.length-1)), Y = v => pt + ih - (v-mn)/(mx-mn)*ih;
+  let s = `<svg class="chart" viewBox="0 0 ${w} ${h}" role="img">`;
+  [0,0.5,1].forEach(g => { const y = pt + ih*g; s += `<line class="grid" x1="${pl}" x2="${w-pr}" y1="${y}" y2="${y}"/>`; });
+  const path = pts.map((p,i) => p.n == null ? '' : `${X(i)},${Y(p.n)}`).filter(Boolean);
+  s += `<path class="area" d="M${X(0)},${pt+ih} L${path.join(' L')} L${X(pts.length-1)},${pt+ih} Z"/>`;
+  s += `<path class="line" d="M${path.join(' L')}"/>`;
+  pts.forEach((p,i) => {
+    if (pts.length <= 8 || i % 2 === 0) s += `<text x="${X(i)}" y="${h-8}" text-anchor="middle">${esc(p.label)}</text>`;
+    if (p.n == null) { s += `<text x="${X(i)}" y="${pt+ih/2}" text-anchor="middle" style="font-style:italic">n/a</text>`; return; }
+    const dot = `<circle class="dot" cx="${X(i)}" cy="${Y(p.n)}" r="4.5"/>`;
+    s += p.u ? `<a href="${esc(fix(p.u))}" target="_blank" rel="noopener"><title>${esc(p.label)}: ${esc(p.raw)} — open field</title>${dot}</a>` : dot;
+    const anchor = i === 0 ? 'start' : i === pts.length-1 ? 'end' : 'middle';
+    const iMax = pts.findIndex(q => q.n === mx0), iMin = pts.findIndex(q => q.n === mn0);
+    const show = pts.length <= 6 || i === 0 || i === pts.length-1 || (i === iMax && i > 1) || (i === iMin && i < pts.length-2);
+    if (show) s += `<text class="lbl" x="${X(i)}" y="${Y(p.n)-10}" text-anchor="${anchor}">${fmt(p.n)}${unit}</text>`;
+  });
+  el.innerHTML = s + '</svg>';
+}
+const P = (c, label) => ({ n: num(c?.v), raw: c?.v, u: c?.u, label });
+lineChart($('#c-value'), Qs.map(q => P(q.value, q.q)));
+barChart($('#c-noi'), Qs.map(q => P(q.noi, q.q)));
+// occupancy flat at 91.7% each quarter — show WALT as the moving series and occupancy in the tile
+lineChart($('#c-occ'), Qs.map(q => P(q.walt, q.q)), { fmt: n => n.toFixed(2), unit: ' yrs' });
+$('#c-occ').insertAdjacentHTML('beforeend', `<div class="legend"><span><i style="background:var(--s1)"></i>WALT (years)</span><span>Occupancy: ${Qs.map(q => L(q.occ)).join(' · ')}</span></div>`);
+
+// trend table
+const TR = [['Appraised value','value'],['Cap rate','cap'],['Value / SF','psf'],['Occupancy','occ'],['WALT','walt'],
+  ['TTM revenue','rev'],['TTM operating expenses','opex'],['TTM NOI','noi'],['TTM interest expense','int'],['TTM net income','ni'],['TTM CFADS','cfads'],['TTM distributions','dist'],
+  ['Total assets','assets'],['Cash','cash'],['Total liabilities','liab'],['Debt','debt'],['Total equity','equity']];
+$('#t-trend').innerHTML = `<thead><tr><th class="sticky">Metric</th>${Qs.map(q => `<th class="r">${q.q}</th>`).join('')}</tr></thead><tbody>` +
+  TR.map(([k,f]) => `<tr><td class="sticky">${k}</td>${Qs.map(q => `<td class="r">${L(q[f])}</td>`).join('')}</tr>`).join('') + '</tbody>';
+
+// ---------- data-quality notes ----------
+if (DATA.flags?.length) {
+  const byQ = {}; DATA.flags.forEach(f => (byQ[f.q] ||= []).push(f));
+  $('#notes').hidden = false;
+  $('#notes').innerHTML = `<h3>Extraction flags (${DATA.flags.length})</h3><ul>` + Object.entries(byQ).map(([q, fs]) => {
+    const f0 = fs[0];
+    return `<li><b>${q} balance sheet</b> — the extracted Summary form does not match the statement's own ${f0.detail_col} column. ` +
+      fs.map(f => `${f.field}: Summary ${L(f.summary, {noflag: true})} vs detail ${L(f.detail)}`).join('; ') +
+      `. The Summary values equal the <b>${f0.matches_col || 'unknown'}</b> column, and its "As of Date" was extracted as “${esc(f0.asof?.v || '')}”. Figures marked <span class="warnb" style="vertical-align:-2px">!</span> above are shown as extracted; use the detail values for analysis.</li>`;
+  }).join('') + '</ul>';
+}
+
+// ---------- tenants ----------
+$('#rr-src').innerHTML = 'Rent roll as of ' + L(DATA.rr_period) + ' · lease abstracts';
+const T = DATA.tenants.filter(t => t.tenant?.v);
+const totalRow = DATA.tenants.find(t => (t.unit?.v || '').startsWith('TOTAL'));
+const nra = num(K['Net Rentable Area']?.v) || 300000;
+let th = `<thead><tr><th>Tenant</th><th>Floors</th><th class="r">SF</th><th class="r">% of NRA</th><th>Lease start</th><th>Expiry</th><th class="r">Term</th><th class="r">Current rent / SF</th><th class="r">Current annual rent</th></tr></thead><tbody>`;
+T.forEach((t, i) => {
+  const Lz = t.lease, cur = Lz?.current, sf = num(t.sf?.v), vac = /VACANT/i.test(t.tenant.v);
+  const pct = sf ? (sf/nra*100).toFixed(1) + '%' : '—';
+  th += `<tr class="${vac ? 'vac' : 'tenant'}" data-i="${i}"><td>${L(t.tenant)}</td><td>${L(t.unit)}</td><td class="r">${L(t.sf)}</td><td class="r num"><span class="sfbar" style="width:${sf ? Math.round(sf/nra*60) : 0}px"></span> ${pct}</td>
+    <td>${L(t.start, {empty:'—'})}</td><td>${L(t.end, {empty:'—'})}</td><td class="r">${Lz ? L(Lz.info['Lease Term']) : '—'}</td><td class="r">${cur ? L(cur['Rent PSF']) : (Lz ? '<span class="none">no period match</span>' : '—')}</td><td class="r">${cur ? L(cur['Base Rent']) : '—'}</td></tr>`;
+  if (Lz) {
+    const inf = Lz.info;
+    th += `<tr class="detail" hidden id="det-${i}"><td colspan="9">
+      <div style="display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;align-items:baseline"><b>Lease abstract</b>
+        <span>Signed ${L(inf['Lease Date'])}</span><span>Expires ${L(inf['Lease Expiration Date'])}</span><span>Term ${L(inf['Lease Term'])}</span><span>Year-1 base rent ${L(inf['Base Rent'])}</span>
+        <span>Premises ${L(inf['Address'])}</span><a href="${docUrl(Lz.doc)}" target="_blank" rel="noopener" style="color:var(--accent);margin-left:auto">Open lease document ↗</a></div>
+      <div class="sched">${Lz.schedule.map(s => `<div class="${s === cur ? 'cur' : ''}"><span>Yr ${esc(s['Lease Years']?.v)}</span><span>${L(s['Rent PSF'])} · ${L(s['Base Rent'], {text: fmtM(num(s['Base Rent']?.v))})}</span></div>`).join('')}</div>
+    </td></tr>`;
+  }
+});
+if (totalRow) th += `<tr class="total"><td>Total leased</td><td></td><td class="r">${L(totalRow.sf)}</td><td class="r num">${(num(totalRow.sf?.v)/nra*100).toFixed(1)}%</td><td colspan="5"></td></tr>`;
+$('#t-tenants').innerHTML = th + '</tbody>';
+document.querySelectorAll('tr.tenant').forEach(r => r.addEventListener('click', e => {
+  if (e.target.closest('a')) return; const d = $('#det-' + r.dataset.i); if (!d) return; d.hidden = !d.hidden; r.classList.toggle('open', !d.hidden);
+}));
+
+// ---------- income statement ----------
+$('#is-src').innerHTML = L(last.period);
+const IS = DATA.is, noiRow = IS.find(r => r.item.startsWith('Net Operating Income'));
+lineChart($('#c-mnoi'), noiRow.m.map((c, i) => P(c, DATA.is_months[i].replace(' 20', ' ’').slice(0,7))), { fmt: fmtK, pad: 0.6 });
+const wfItems = [['Total Revenue','Revenue'],['Total Operating Expenses','Opex'],['Net Operating Income (NOI)','NOI'],['Interest Expense','Interest'],['Net Income','Net income'],['Cash Flow After Debt Service (CFADS)','CFADS'],['Distribution to Members','Distrib.']];
+barChart($('#c-wf'), wfItems.map(([k,l]) => { const r = IS.find(x => x.item === k); const p = P(r?.ttm, l); if (/Opex|Interest/.test(l)) p.cls = 'bar2'; return p; }), { fmt: fmtM });
+$('#c-wf').insertAdjacentHTML('beforeend', `<div class="legend"><span><i style="background:var(--s1)"></i>Income / cash</span><span><i style="background:var(--s2)"></i>Expense</span></div>`);
+const isHeads = /^(Revenue|Operating Expenses|Supplemental Cash Flow)$/, isTotals = /^(Total Revenue|Total Operating Expenses|Net Operating Income|Net Income)/;
+$('#t-is').innerHTML = `<thead><tr><th class="sticky">Line item</th>${DATA.is_months.map(m => `<th class="r">${m}</th>`).join('')}<th class="r">TTM</th></tr></thead><tbody>` +
+  IS.map(r => isHeads.test(r.item) ? `<tr class="head"><td class="sticky">${esc(r.item)}</td><td colspan="13"></td></tr>` :
+    `<tr class="${isTotals.test(r.item) ? 'total' : ''}"><td class="sticky">${esc(r.item)}</td>${r.m.map(c => `<td class="r">${L(c, {empty:'—'})}</td>`).join('')}<td class="r">${L(r.ttm, {empty:'—'})}</td></tr>`).join('') + '</tbody>';
+
+// ---------- balance sheet ----------
+$('#bs-src').textContent = 'Meridian Tower Holdings LLC · monthly, ' + DATA.bs_cols[0].replace('As of ','') + ' – ' + DATA.bs_cols[DATA.bs_cols.length-1].replace('As of ','');
+const bsHeads = /^(Assets|Liabilities|Members' Equity)$/, bsTotals = /^TOTAL/;
+$('#t-bs').innerHTML = `<thead><tr><th class="sticky">Line item</th>${DATA.bs_cols.map(m => `<th class="r">${m.replace('As of ','')}</th>`).join('')}</tr></thead><tbody>` +
+  DATA.bs.map(r => bsHeads.test(r.item) ? `<tr class="head"><td class="sticky">${esc(r.item)}</td><td colspan="12"></td></tr>` :
+    `<tr class="${bsTotals.test(r.item) ? 'total' : ''}"><td class="sticky">${esc(r.item)}</td>${r.m.map(c => `<td class="r">${L(c, {empty:'—'})}</td>`).join('')}</tr>`).join('') + '</tbody>';
+
+// ---------- loan ----------
+const LN = DATA.loan, longF = /Amortization|Prepayment|Assignment|Defaults/;
+const loanOrder = ['Primary Borrower','Borrower Type','Borrower Jurisdiction','Lender Name','Lender Facility Type','Facility Commitment Amount','Agreement Date','Facility Maturity Date','Interest Rate Bases','Available Currencies','Amortization Schedule','Voluntary Prepayment Minimum','Assignment Section','Defaults Section'];
+$('#loan-kv').innerHTML = loanOrder.filter(k => LN[k]).map(k => `<div class="${longF.test(k) ? 'long' : ''}"><span>${k}</span><span>${L(LN[k])}</span></div>`).join('') +
+  `<div class="long"><span>Document</span><span><a href="${docUrl(Object.values(LN)[0].d)}" target="_blank" rel="noopener" style="color:var(--accent)">Open loan agreement ↗</a></span></div>`;
+
+// ---------- appraisal ----------
+$('#ap-src').innerHTML = `Q2 2026 appraisal · effective ${L(K['Effective Date'])} · report dated ${L(K['Date of Report'])} · ${L(K['Prepared By'])}`;
+barChart($('#c-proj'), DATA.noi_proj.map((p, i) => P(p.noi, 'Y' + (i+1))), { fmt: n => (n/1e6).toFixed(1) + 'M' });
+$('#uw-kv').innerHTML = [['Value premise','Value Premise'],['Methodology','Valuation Methodology'],['Going-in cap rate','Value Cap Rate'],['Terminal cap rate','Terminal Capitalization Rate'],['Discount rate','Discount Rate'],['IRR','IRR Rate'],['Vacancy loss','Vacancy Loss'],['Hold period','Model Assumptions - Hold Period (Current Quarter)'],['Assessed value (tax)','Assessed Value'],['Current tax liability','Current Tax Liability'],['Prepared for','Prepared For'],['Appraiser','Appraiser Name']]
+  .map(([k,f]) => `<div><span>${k}</span><span>${L(K[f])}</span></div>`).join('');
+const CK = [['Property Name','Property'],['Year Built','Built'],['Sale Date','Sale date'],['Sale Price','Sale price'],['Net Operating Income (NOI)','NOI'],['Captilization Rate','Cap rate'],['Occupancy Rate','Occupancy'],['Percentage Adjustment','Adj. $/SF']];
+$('#t-comps').innerHTML = `<thead><tr>${CK.map(([k,l],i) => `<th class="${i ? 'r' : ''}">${l}</th>`).join('')}</tr></thead><tbody>` +
+  DATA.comps.map(c => `<tr>${CK.map(([k],i) => `<td class="${i ? 'r' : ''}">${L(c[k], {empty:'—'})}</td>`).join('')}</tr>`).join('') +
+  `<tr class="total"><td>The Meridian (subject)</td><td>${L(K['Year Built'])}</td><td>—</td><td class="r">${L(K['Value Conclusion'])}</td><td class="r">${L(last.noi)}</td><td class="r">${L(K['Value Cap Rate'])}</td><td class="r">${L(K['Occupancy Rate'])}</td><td class="r">${L(K['Final Valuation PSF (Current Quarter)'])}</td></tr></tbody>`;
+
+// ---------- data room ----------
+const S = DATA.stats;
+const AS = DATA.anchor_stats || {docs_anchored: 0, records: 0, succeed: 0, pending: 0, ledgers: []};
+$('#dr-src').innerHTML = `${S.docs} documents · ${S.folders} folders · ${S.artifact_docs} with extracted data · <span class="anch" style="cursor:default;vertical-align:-3px">✓</span> ${AS.docs_anchored} of ${S.docs} anchored on-chain (${AS.succeed} ledger records${AS.pending ? `, ${AS.pending} pending` : ''})`;
+const byF = {}; DATA.dataroom.forEach(d => (byF[d.folder] ||= []).push(d));
+$('#folders').innerHTML = Object.keys(byF).sort().map(f => `<div class="folder"><h3>${esc(f)}<small>${byF[f].length} file${byF[f].length > 1 ? 's' : ''}</small></h3><ul>` +
+  byF[f].sort((a,b) => a.name.localeCompare(b.name)).map(d => {
+    const A = d.anchoring || [], ok = A.filter(r => r.status === 'Succeed').length;
+    const badge = d.anchored ? `<button class="anch${d.pending ? ' part' : ''}" type="button" data-t="anch-${d.id}" title="Anchored on ${ok} ledger${ok > 1 ? 's' : ''}: ${A.filter(r => r.status === 'Succeed').map(r => r.ledger).join(', ')}${d.pending ? ` · ${d.pending} pending` : ''} — click for details">✓</button>` : `<span class="anch" style="background:var(--surface2);color:var(--muted)" title="No anchoring record">–</span>`;
+    const detail = A.length ? `<div class="anchd" id="anch-${d.id}" hidden><table><thead><tr><th>Ledger</th><th>Status</th><th>Transaction</th><th>Anchored</th><th></th></tr></thead><tbody>` +
+      A.map(r => `<tr><td>${esc(r.ledger)}</td><td class="${r.status === 'Succeed' ? 'ok' : 'pend'}">${esc(r.status)}</td><td class="tx" title="${esc(r.tx)}">${esc(r.tx.length > 22 ? r.tx.slice(0,10) + '…' + r.tx.slice(-8) : r.tx)}</td><td>${esc((r.at || '').slice(0,10))}</td><td><a href="${esc(r.link)}" target="_blank" rel="noopener">record ↗</a></td></tr>`).join('') +
+      `</tbody></table><div style="color:var(--muted);margin-top:5px;word-break:break-all;white-space:normal">SHA-256 ${esc(A[0].checksum)}</div></div>` : '';
+    return `<li>${badge}<a href="${docUrl(d.id)}" target="_blank" rel="noopener" title="${esc(d.name)}">${esc(d.name.replace(/\.pdf$/,''))}</a>${d.fields ? `<span class="chip">${d.fields} fields</span>` : '<span class="chip none">no extraction</span>'}${detail}</li>`;
+  }).join('') + '</ul></div>').join('');
+document.querySelectorAll('button.anch').forEach(b => b.addEventListener('click', () => { const t = document.getElementById(b.dataset.t); if (t) t.hidden = !t.hidden; }));
+
+$('#foot').innerHTML = `<span>Source: Inveniam sales environment, deal ${D.id}</span><span>${S.cells.toLocaleString()} extracted fields · ${S.linked.toLocaleString()} with field-level viewer links</span><span>Links open ${HOST.replace('https://','')}</span><span>${AS.docs_anchored} documents anchored on ${AS.ledgers.length} ledgers (${AS.ledgers.join(', ')})</span><span>Demo data — invented companies</span>`;
+
+// ---------- hover tooltip for cells ----------
+const tip = $('#tip');
+document.addEventListener('mouseover', e => {
+  const a = e.target.closest('a.cell'); if (!a) { tip.style.opacity = 0; return; }
+  tip.innerHTML = `<b>${esc(a.dataset.doc || 'document')}${a.dataset.page ? ' · p.' + a.dataset.page : ''}</b>extracted value: ${esc(a.dataset.val)} — click to open the field`;
+  tip.style.opacity = 1;
+});
+document.addEventListener('mousemove', e => { if (tip.style.opacity == 1) { const r = tip.getBoundingClientRect(); tip.style.left = Math.min(e.clientX + 14, innerWidth - r.width - 8) + 'px'; tip.style.top = (e.clientY + 16 + r.height > innerHeight ? e.clientY - r.height - 10 : e.clientY + 16) + 'px'; } });
+document.addEventListener('mouseout', e => { if (e.target.closest && e.target.closest('a.cell')) tip.style.opacity = 0; });
+</script>

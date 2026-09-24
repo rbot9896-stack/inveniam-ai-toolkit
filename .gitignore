@@ -1,0 +1,5 @@
+.env*
+deals/
+*.jwt*
+__pycache__/
+.DS_Store
