@@ -1,6 +1,6 @@
 # Inveniam AI Toolkit
 
-**Quick start:** open Claude or ChatGPT and paste:
+**Quick start:** open the Claude desktop app's **Cowork** tab, or the ChatGPT desktop app in **Codex** mode (not the plain chat window — it can't run anything on your computer), and paste:
 
 > Read https://raw.githubusercontent.com/rbot9896-stack/inveniam-ai-toolkit/main/START-HERE.md and walk me through the setup.
 

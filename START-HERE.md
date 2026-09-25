@@ -17,10 +17,11 @@ asks a few questions and takes you through it one step at a time. You do two
 things yourself: create API credentials on the Inveniam website and paste them
 into a terminal window once. Nothing sensitive goes into the chat.
 
-**Best experience: use a desktop app** — the Claude desktop app (Cowork), or
-the ChatGPT desktop app switched to **Codex** mode. Either can open the toolkit
-folder and run things for you; the chat websites, and the ChatGPT app in plain
-ChatGPT mode, can only do the question-answering part.
+**Use Cowork or Codex, not the chat window.** Start this in the Claude desktop
+app's **Cowork** tab, or in the ChatGPT desktop app with the top picker set to
+**Codex**. Those can open the toolkit folder and run things for you; the chat
+websites — and the desktop apps in plain chat mode — cannot, and the assistant
+will ask you to restart in the right place (§0 explains how).
 
 Repository: https://github.com/rbot9896-stack/inveniam-ai-toolkit (public, no
 credentials inside — updates land here, so prefer it over an emailed zip).
@@ -30,10 +31,53 @@ Prepared by Ryder Desenberg (Inveniam), 2026-09-24.
 
 ---
 
+## §0. Before anything else: are we in the right place?
+
+**This matters more than any other step.** Both Claude and ChatGPT have a plain
+chat window and a separate "works on your computer" mode. The chat window
+cannot open folders or run commands, so the setup dead-ends there. The
+assistant must establish which one it is running in **as its very first
+action**, before the intake in §1, and move the user if needed.
+
+| | Plain chat — wrong place for setup | Working mode — right place |
+|---|---|---|
+| Claude | claude.ai in a browser; or the desktop app's **Chat** tab | Desktop app → **Cowork** tab (left sidebar) → *New task* → **Link to this computer** |
+| ChatGPT | chatgpt.com in a browser; or the desktop app with the top picker on **ChatGPT** | Desktop app → picker at the top of the window → **Codex** → open a folder as the project |
+
+**How the assistant tells:** try to list a folder or run `echo ok`. If you
+cannot run anything on the user's computer, you are in plain chat.
+
+**If in plain chat, say this and stop** (don't start the intake; don't have
+them create API keys yet — it would only be redone):
+
+> This setup needs the version of me that can work on your computer, and this
+> chat window can't. Let's restart in the right place — it takes a minute and
+> nothing is lost.
+>
+> **Claude:** open the Claude desktop app (https://claude.ai/download if you
+> don't have it). In the left sidebar click **Cowork**, then **New task**, then
+> **Link to this computer**. In that task, paste the same message you sent me.
+>
+> **ChatGPT:** open the ChatGPT desktop app (https://chatgpt.com/download). At
+> the top of the window there's a picker that says **ChatGPT** — switch it to
+> **Codex**. When it asks for a project or folder, pick or create
+> `dev/inveniam` in your home folder. Then paste the same message you sent me.
+>
+> If you only want to *ask questions* about deals and don't need documents,
+> extracted data or dashboards, stay here — that's §5, and it works in chat.
+
+The one thing plain chat *can* do is §5 (the connector). If the user is in
+chat and asks only for that, do §5 and nothing else.
+
+---
+
 ## Instructions for the assistant
 
 You are guiding someone who may not be technical. For the whole conversation:
 
+0. **First, §0.** Confirm you are running in Cowork or Codex (you can run a
+   command on the user's computer). If not, give the §0 restart message and
+   stop. Re-check whenever the user says they've switched.
 1. **One step at a time.** One question or one instruction, then wait. Never
    paste the whole guide at them.
 2. **Confirm before advancing.** After each step, ask what they see and check
@@ -70,11 +114,9 @@ You are guiding someone who may not be technical. For the whole conversation:
 ## §1. Intake — one question at a time
 
 1. *"Mac or Windows PC?"*
-2. *"Which assistant are we in — Claude or ChatGPT? And the desktop app or the
-   website?"* Recommend the desktop app on either side (Claude desktop /
-   Cowork, or Codex for ChatGPT): it's the nicer experience and the only way to
-   do the API route in §6. If they're on the website, carry on — §5 works
-   there — and suggest installing the desktop app when they reach §6.
+2. *"Which assistant are we in — Claude or ChatGPT?"* (You already know from
+   §0 that you're in Cowork or Codex; if you're not, you shouldn't be here —
+   go back to §0.)
 3. *"Which Inveniam environments do you have a login for — sales
    (sales.inveniam.io), production (icp.inveniam.io), or both?"* Do sales first:
    demo data, safe to experiment on.
