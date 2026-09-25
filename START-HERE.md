@@ -219,10 +219,15 @@ Ryder (not public).
 **First ask which plan they're on** — it decides who can add the connector.
 Q4's owner/member answer only matters for the workspace plans.
 
-**Claude — any plan, including Free** (Free allows one custom connector, which
-this can be).
+**Claude — any plan, including Free.** A "custom connector" is Claude's name
+for adding an MCP server; this is the only step that involves MCP. (The API
+route in §6 doesn't use it at all.)
 
-- *Free / Pro / Max (personal):* the user does it themselves — *Customize →
+- *Free:* **tell the user first:** Free accounts get **one** custom connector in
+  total. Adding Inveniam uses that slot; to add a different one later they'd
+  have to remove Inveniam or upgrade. Proceed only if they're fine with that.
+  Then the same steps as Pro/Max.
+- *Pro / Max (personal):* the user does it themselves — *Customize →
   Connectors → + → Add custom connector → paste URL → Add → Connect.*
 - *Team / Enterprise:* only an **Owner** can add it, once: *Organization
   settings → Connectors → Add → Custom → Web → paste URL → Add.* If the user is
