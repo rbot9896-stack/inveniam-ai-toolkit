@@ -201,6 +201,43 @@ of `python3`.
 
 ---
 
+## §2b. Can this computer reach the Inveniam API? (do this before making keys)
+
+Do this now, before §3 — if the network blocks the API host there is no point
+creating credentials yet. The assistant runs it; the user does nothing.
+
+*What this does:* asks the Inveniam API server for its public docs page and
+prints only the response code. No login, nothing sent. *Why:* company networks
+and some Claude organisation settings block unknown hosts; better to find out
+in ten seconds than after the key step.
+
+Mac / Cowork / Codex on Mac:
+```
+curl -s -o /dev/null -w "%{http_code}\n" -m 15 https://slsus01-api.inveniam.app/v2/api/docs/
+```
+Codex on Windows (PowerShell): the same line with `curl.exe` in place of `curl`.
+For production, repeat with `https://api.inveniam.app/v2/api/docs/`.
+
+Expected: `200`.
+
+If `000` (or it hangs):
+- **Claude on a Team/Enterprise plan:** the organisation's allowlist blocks the
+  host. An Owner adds `slsus01-api.inveniam.app` and `api.inveniam.app` under
+  *Claude Organization settings → Capabilities → allowed domains*. Give the
+  user that sentence to forward, and pause here until it's done. (This
+  "Capabilities" setting is a network allowlist — nothing to do with the MCP
+  connector in §5.)
+- **Claude Free/Pro/Max, or Codex:** there is no Claude/ChatGPT setting
+  involved; the computer itself can't reach the host. Ask the user to open
+  https://slsus01-api.inveniam.app/v2/api/docs/ in a browser: if that fails
+  too, it's their network (VPN, office firewall) → IT. If the browser works
+  but the command doesn't, note it in the feedback and continue — `inv.py`
+  will show whether calls actually go through.
+
+Only proceed to §3 on `200`.
+
+---
+
 ## §3. Create API credentials (the user does this, per environment)
 
 | Environment | Log in at | Base URL for §4 |
@@ -388,8 +425,8 @@ it — so the credentials from §4 are written once and shared. Don't make a sec
 copy of the folder or the `.env` files per assistant; that's how they drift.
 
 Here the assistant runs the commands, not the user. In Guided mode, still say
-what each one does before running it: 2 checks the Inveniam API can be reached
-from this computer (on Windows/PowerShell use `curl.exe`, not `curl`); 3 proves the credentials file works by asking for one deal;
+what each one does before running it: 2 re-checks the Inveniam API can be
+reached (see §2b); 3 proves the credentials file works by asking for one deal;
 4 downloads one deal's inventory and extracted data into `deals/`; 5 builds the
 example dashboard page from that data.
 
@@ -403,14 +440,8 @@ example dashboard page from that data.
      the ChatGPT login already in the app.
      The path is the real one, `~/dev/inveniam`; use that below. Approve each
      command when Codex asks.
-2. Reachability (assistant runs):
-   `curl -s -o /dev/null -w "%{http_code}\n" -m 15 https://slsus01-api.inveniam.app/v2/api/docs/`
-   → `200`. If `000` in Claude on a Team/Enterprise plan, the org's allowlist
-   blocks it: an admin adds `slsus01-api.inveniam.app` and `api.inveniam.app`
-   under *Claude Organization settings → Capabilities → allowed domains*. (This
-   "Capabilities" setting is a network allowlist — nothing to do with the MCP
-   connector in §5.) In Codex, `000` means the machine itself can't reach the
-   host — check the network.
+2. Reachability — already done in §2b. If this is a new computer or a new
+   network since then, rerun the §2b check now.
 3. Credentials (assistant runs, from the folder):
    `python3 inv.py --env sales GET "/v2/deals?limit=1"` (Windows: `python inv.py …`)
    → JSON with `"items"` and `"meta"`. `401` → back to §3 step 2.
@@ -444,7 +475,7 @@ example dashboard page from that data.
 
 | Symptom | Cause → fix |
 |---|---|
-| `000` from the curl check | Network allowlist → admin adds the host (§6.2) |
+| `000` from the curl check | Network allowlist or firewall → §2b |
 | `401` from `inv.py` | No token for the key, or wrong role → §3 |
 | `permissionsError` | Token's role can't see that resource → higher role on the deal |
 | `No credentials file` | Wrong folder or name → `.env.sales` directly in the base folder |
