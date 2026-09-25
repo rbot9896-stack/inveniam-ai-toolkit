@@ -216,21 +216,42 @@ INVENIAM_BASE_URL 34` — all above 0.
 Connector URLs: sales `https://sales-api.inveniam.io/mcp`; production — ask
 Ryder (not public).
 
-**Claude, Team/Enterprise** — an Owner adds it once: *Organization settings →
-Connectors → Add → Custom → Web → paste URL → Add.* If the user is a member,
-give them that sentence to forward. Then the user: *Customize → Connectors →
-Inveniam → Connect* (sign in with the Inveniam login). Per chat: *+ →
-Connectors → toggle on.*
+**First ask which plan they're on** — it decides who can add the connector.
+Q4's owner/member answer only matters for the workspace plans.
 
-**Claude, Pro/Max** — *Customize → Connectors → + → Add custom connector →
-paste URL → Add → Connect.*
+**Claude — any plan, including Free** (Free allows one custom connector, which
+this can be).
 
-**ChatGPT** (Business/Enterprise/Edu) — *Settings → Apps → Advanced settings →
-Developer mode on* (Enterprise/Edu admins first allow it under *Workspace
-settings → Permissions & Roles → Connected Data → Developer mode*). Then
-*Workspace settings → Apps → Create* (or *User settings → Apps → Create*): name,
-server URL, authentication as requested, **Scan tools**. In a chat, select or
-@mention the app on the message that needs it.
+- *Free / Pro / Max (personal):* the user does it themselves — *Customize →
+  Connectors → + → Add custom connector → paste URL → Add → Connect.*
+- *Team / Enterprise:* only an **Owner** can add it, once: *Organization
+  settings → Connectors → Add → Custom → Web → paste URL → Add.* If the user is
+  a member, give them exactly that sentence to forward — nothing more is needed
+  from the owner. Then the user: *Customize → Connectors → Inveniam → Connect*
+  (sign in with the Inveniam login). Per chat: *+ → Connectors → toggle on.*
+
+**ChatGPT** — custom connectors need *Developer mode*, web app only
+(chatgpt.com, not the mobile app).
+
+- *Free / Go:* not available. Options: upgrade to Plus, or use Claude (Free
+  works there).
+- *Plus / Pro (personal):* the user does it themselves — *Settings → Apps* (or
+  *Connectors*) *→ Advanced settings → Developer mode on*; if the toggle isn't
+  there, look under *Settings → Security*. Then *Apps → Create*: name, server
+  URL, authentication as requested, **Scan tools**.
+- *Business:* a workspace **Owner** turns on Developer mode once (*Workspace
+  settings → Permissions & Roles → Connected Data → Developer mode*). Ask for
+  only that. Then the user creates the app under *Settings → Apps → Create* as
+  above.
+- *Enterprise / Edu:* an admin enables Developer mode as above and usually
+  also creates and publishes the app workspace-wide (*Workspace settings →
+  Apps → Create → Scan tools → publish*). Give them the URL and the name
+  *Inveniam Sales*.
+
+In a chat, select or @mention the app on the message that needs it.
+
+Tell ChatGPT users plainly: this connector is everything they get — §6 (API
+access, documents, extracted fields, dashboards) needs Claude on the desktop.
 
 Test: *"List the deals in the Inveniam sales environment."* Expected: 17
 deals, including The Meridian, Madison Ave Office, Coca-Cola, Fund II.
