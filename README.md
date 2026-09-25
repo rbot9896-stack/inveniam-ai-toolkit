@@ -16,14 +16,14 @@ endpoints and recipes, helper scripts, the platform skill, and one worked exampl
 | `START-HERE.md` | anyone setting up — paste it into Claude or ChatGPT and say "walk me through this" |
 | `API-PLAYBOOK.md` | the assistant, after setup — how to call the API, what comes back, recipes |
 | `skill/inveniam/SKILL.md` | the platform skill (maintained at https://github.com/aberdellans/Agent_skill) |
-| `inv.sh`, `tools/` | API helper; pull any deal, summarise inventory / extraction / anchoring |
+| `inv.py`, `tools/` | API helper; pull any deal, summarise inventory / extraction / anchoring — plain Python, runs on Mac, Windows and Linux (`.sh` files are wrappers) |
 | `examples/meridian/` | worked example: a provenance dashboard where every figure links to its source field |
 
 Get the files — either:
 - `git clone https://github.com/rbot9896-stack/inveniam-ai-toolkit.git ~/dev/inveniam` (then `git pull` for updates), or
 - green **Code → Download ZIP**, unzip, rename the folder to `inveniam` and put it in `~/dev`.
 
-Either way the files must sit directly in `~/dev/inveniam` (`inv.sh`, `tools/`, …); `START-HERE.md` §2 walks through it.
+Either way the files must sit directly in `~/dev/inveniam` (`inv.py`, `tools/`, …); `START-HERE.md` §2 walks through it.
 
 No credentials are in this repository. They live only in `.env` files on each
 user's own computer, created during setup.

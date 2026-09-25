@@ -1,6 +1,6 @@
 """Select the cells the Meridian dashboard needs.
 Reads  ../../deals/the-meridian/{cells,docs,folders,deal,anchoring}.json  ->  writes data.json there
-(pull first with: INV_ENV=sales bash tools/fetch_deal.sh "The Meridian")
+(pull first with: python3 tools/fetch_deal.py --env sales "The Meridian")
 Each figure is {v: value, u: fieldPreviewURL, p: page, d: documentId}.
 Then run build_meridian.py. Worked example of API-PLAYBOOK recipes C, D and E.
 """

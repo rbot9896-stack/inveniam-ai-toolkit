@@ -141,18 +141,20 @@ then ask the user to **Add folder** → `dev/inveniam` so you can see it.
 
 **Check** — Mac: `ls ~/dev/inveniam ~/dev/inveniam/tools` · Windows:
 `Get-ChildItem "$env:USERPROFILE\dev\inveniam" -Recurse -Name`
-Expected: `inv.sh`, `API-PLAYBOOK.md`, `START-HERE.md`, `README.md`, a `tools`
-folder with `fetch_deal.sh` and `deal_summary.py`, an `examples` folder, a
-`skill` folder — and **no** `inveniam-ai-toolkit-main` folder nested inside.
+Expected: `inv.py`, `inv.sh`, `API-PLAYBOOK.md`, `START-HERE.md`, `README.md`,
+a `tools` folder with `fetch_deal.py` and `deal_summary.py`, an `examples`
+folder, a `skill` folder — and **no** `inveniam-ai-toolkit-main` folder nested inside.
 
 **Updating later** — Option A: `cd ~/dev/inveniam && git pull`. Option B:
 download again and replace the files. Your `.env` credential files are not in
 the download and are left untouched either way.
 
-Windows note: the helpers are bash/Python. Inside Claude Cowork they run
-unchanged, because Cowork's shell is a Linux environment that mounts this
-folder. Codex on Windows should be installed under WSL for the same reason.
-They won't run in plain PowerShell, and don't need to.
+Windows note: the helpers are plain Python (`inv.py`, `tools/fetch_deal.py`);
+the `.sh` files are thin wrappers for Mac/Linux and can be ignored on Windows.
+Inside Claude Cowork nothing is needed (its shell is Linux with Python). With
+Codex on Windows, install Python once from the Microsoft Store ("Python 3.12"
+or newer), then every command below works in PowerShell with `python` in place
+of `python3`.
 
 ---
 
@@ -302,7 +304,7 @@ Create a Claude Project (or ChatGPT project) named *Inveniam API*, upload
 knowledge, and paste this as its instructions:
 
 > Read API-PLAYBOOK.md before doing anything against the Inveniam platform.
-> Reach the API through ~/dev/inveniam/inv.sh on the user's computer (request
+> Reach the API through ~/dev/inveniam/inv.py on the user's computer (request
 > access to that folder if it isn't connected); don't rely on the connector.
 > Never ask for, print or copy API keys or tokens. Production content is
 > confidential and never shareable; sales content is demo data. Every figure
@@ -329,7 +331,7 @@ machine. Two qualify, and the toolkit works identically with either:
 | Tool | **Claude desktop app** (Cowork) | **Codex** desktop app (or Codex CLI) |
 | Plans | Pro, Max, Team, Enterprise (not Free) | every plan, including Free and Go (small allowance on Free) |
 | Get it | https://claude.ai/download | https://chatgpt.com/codex (desktop app) · CLI: `npm i -g @openai/codex` |
-| Windows | works as-is (Cowork's shell is Linux) | install under **WSL** (Ubuntu) so the bash helpers run |
+| Windows | works as-is (Cowork's shell is Linux) | works natively — needs **Python** (Microsoft Store → "Python 3", one click); no WSL |
 
 **Recommend the desktop app on both sides** — the chat website can't run
 anything on the computer, and the desktop apps are the comfortable way in for
@@ -338,13 +340,13 @@ Claude Free and wants this route, Codex with their ChatGPT login is the free
 way to get it.
 
 **Using both Claude and Codex?** Nothing extra to do. Both open the same
-folder (`~/dev/inveniam`), and `inv.sh` reads the `.env` files that sit beside
+folder (`~/dev/inveniam`), and `inv.py` reads the `.env` files that sit beside
 it — so the credentials from §4 are written once and shared. Don't make a second
 copy of the folder or the `.env` files per assistant; that's how they drift.
 
 Here the assistant runs the commands, not the user. In Guided mode, still say
 what each one does before running it: 2 checks the Inveniam API can be reached
-from this computer; 3 proves the credentials file works by asking for one deal;
+from this computer (on Windows/PowerShell use `curl.exe`, not `curl`); 3 proves the credentials file works by asking for one deal;
 4 downloads one deal's inventory and extracted data into `deals/`; 5 builds the
 example dashboard page from that data.
 
@@ -365,16 +367,19 @@ example dashboard page from that data.
    connector in §5.) In Codex, `000` means the machine itself can't reach the
    host — check the network.
 3. Credentials (assistant runs, from the folder):
-   `chmod 700 inv.sh tools/*.sh && INV_ENV=sales ./inv.sh GET "/v2/deals?limit=1"`
+   `python3 inv.py --env sales GET "/v2/deals?limit=1"` (Windows: `python inv.py …`)
    → JSON with `"items"` and `"meta"`. `401` → back to §3 step 2.
    `No credentials file` → §4 landed in the wrong place.
 4. First real pull (assistant runs):
    ```
-   INV_ENV=sales bash tools/fetch_deal.sh "The Meridian"
+   python3 tools/fetch_deal.py --env sales "The Meridian"
    python3 tools/deal_summary.py deals/the-meridian
    ```
-   → a Markdown table of 30 documents with field counts and ✓ anchoring ledgers.
-   Try another deal by title to show it's generic: `bash tools/fetch_deal.sh "Madison"`.
+   → after the pull: `The Meridian: 30 documents, 8 folders, 24 artifacts, 4293
+   cells, 3201 with viewer links` and `30 documents with anchoring records`;
+   then a Markdown table of 30 documents with field counts and ✓ anchoring
+   ledgers. Try another deal by title to show it's generic:
+   `python3 tools/fetch_deal.py --env sales "Madison"`.
 5. Optional — the worked dashboard example:
    ```
    python3 examples/meridian/meridian_data.py && python3 examples/meridian/build_meridian.py
@@ -395,7 +400,7 @@ example dashboard page from that data.
 | Symptom | Cause → fix |
 |---|---|
 | `000` from the curl check | Network allowlist → admin adds the host (§6.2) |
-| `401` from `inv.sh` | No token for the key, or wrong role → §3 |
+| `401` from `inv.py` | No token for the key, or wrong role → §3 |
 | `permissionsError` | Token's role can't see that resource → higher role on the deal |
 | `No credentials file` | Wrong folder or name → `.env.sales` directly in the base folder |
 | Empty response / 0-byte file | Intermittent API behaviour → rerun; never run calls in parallel |

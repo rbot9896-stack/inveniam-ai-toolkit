@@ -12,15 +12,15 @@ people ask for. Last verified 2026-09-24. Canonical copy: https://raw.githubuser
 
 ## 1. Making a call
 
-All calls go through `inv.sh` in the connected folder (`~/mnt/inveniam` in
+All calls go through `inv.py` (or its wrapper `inv.sh`) in the connected folder (`~/mnt/inveniam` in
 Cowork's shell). It exchanges key + token for a short-lived JWT, caches it ~50
 minutes per environment, and adds the headers. You never see credential values.
 
 ```
 cd ~/mnt/inveniam
-./inv.sh GET "/v2/deals?page=1&limit=100"                 # production (.env)
-INV_ENV=sales ./inv.sh GET "/v2/deals?page=1&limit=100"   # sales (.env.sales)
-./inv.sh POST "/v2/dataroom/file-veracity/initiate" -H "content-type: application/json" -d '{"fileId":"…"}'
+python3 inv.py GET "/v2/deals?page=1&limit=100"           # production (.env)   (Windows: python inv.py …)
+python3 inv.py --env sales GET "/v2/deals?page=1&limit=100"   # sales (.env.sales); INV_ENV=sales also works
+python3 inv.py POST "/v2/dataroom/file-veracity/initiate" -d '{"fileId":"…"}'   # -d implies JSON; -H "k: v" and -o FILE also supported
 ```
 
 Under the hood: `GET /v2/api-keys/auth/token` with headers `x-api-key: <key>`
@@ -36,7 +36,7 @@ and `Authorization: <token>` → `{"token": <jwt>}`; every call then sends
 | Spec | `GET /v2/api/docs/swagger-ui-init.js` (~640 KB — grep it; `/v2/api/docs-json` is 403) | same path |
 
 Working rules:
-- **Sequential calls only.** Parallel `inv.sh` calls from one shell return empty bodies.
+- **Sequential calls only.** Parallel `inv.py` calls from one shell return empty bodies.
 - **Page.** `limit` ≤ 100; responses are `{items, meta}`; production `/v2/deals` at 100 is ~50K chars — filter before printing.
 - **Empty 200s happen.** Retry after a few seconds; if one document stays empty, report it rather than treating it as missing.
 - **Long commands fail in Cowork** (`spawn E2BIG` above ~6 KB). Write a script file, then run it.
@@ -96,7 +96,7 @@ extractedData.forms[]:
 ```
 
 Flatten to rows `{doc, docId, contentType, form, rec, field, value, page, url}`
-— `tools/fetch_deal.sh` does this into `deals/<slug>/cells.json` and `.csv`.
+— `tools/fetch_deal.py` does this into `deals/<slug>/cells.json` and `.csv`.
 Content types seen: APPRAISAL, INCOME_STATEMENT, BALANCE_SHEET, RENT_ROLL,
 LEASE, CREDIT_AGREEMENT. Not every document has an artifact (decks, memos, cap
 tables, ESA/title/zoning reports usually don't).
@@ -141,7 +141,7 @@ pointer and the record link.
 ## 7. Recipes
 
 **A. Explore a deal.** `GET /v2/deals` (filter by title) → `GET /v2/deals/{id}`
-→ folders → documents. Or `INV_ENV=… bash tools/fetch_deal.sh "<title or id>"`
+→ folders → documents. Or `python3 tools/fetch_deal.py --env … "<title or id>"`
 then `python3 tools/deal_summary.py deals/<slug>` for inventory + extraction
 coverage + anchoring in one table.
 
@@ -164,7 +164,7 @@ values). `examples/meridian/meridian_data.py` has a working implementation of
 the balance-sheet check.
 
 **D. Anchoring audit.** Taxonomy call per document (sequential) → table of
-document / ledgers Succeed / Pending / checksum. `fetch_deal.sh` already saves
+document / ledgers Succeed / Pending / checksum. `fetch_deal.py` already saves
 this as `anchoring.json`; `deal_summary.py` prints it.
 
 **E. Provenance dashboard for any deal.** Pull (A) → select figures by
