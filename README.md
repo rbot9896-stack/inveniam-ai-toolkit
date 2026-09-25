@@ -1,6 +1,6 @@
 # Inveniam AI Toolkit
 
-**Quick start:** open the Claude desktop app's **Cowork** tab, or the ChatGPT desktop app in **Codex** mode (not the plain chat window — it can't run anything on your computer), and paste:
+**Quick start:** get the files into `~/dev/inveniam` (below), open that folder in the Claude desktop app's **Cowork** tab or in the ChatGPT desktop app's **Codex** mode (not the plain chat window — it can't run anything on your computer), and say **"set me up"**. The assistant reads the instructions in the folder and takes it from there. If you can't open the folder yet, paste this instead:
 
 > Read https://raw.githubusercontent.com/rbot9896-stack/inveniam-ai-toolkit/main/START-HERE.md and walk me through the setup.
 
@@ -13,6 +13,7 @@ endpoints and recipes, helper scripts, the platform skill, and one worked exampl
 
 | Start with | Who it's for |
 |---|---|
+| `AGENTS.md` / `CLAUDE.md` | read automatically by Codex / Claude when this folder is opened — so "set me up" is enough |
 | `START-HERE.md` | anyone setting up — paste it into Claude or ChatGPT and say "walk me through this" |
 | `API-PLAYBOOK.md` | the assistant, after setup — how to call the API, what comes back, recipes |
 | `skill/inveniam/SKILL.md` | the platform skill (maintained at https://github.com/aberdellans/Agent_skill) |
