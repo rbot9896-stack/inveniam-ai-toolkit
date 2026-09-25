@@ -4,6 +4,9 @@
 
 > Read https://raw.githubusercontent.com/rbot9896-stack/inveniam-ai-toolkit/main/START-HERE.md and walk me through the setup.
 
+Works with the Claude desktop app (Cowork) or OpenAI Codex — both can run the
+helpers on your machine and share the same credentials folder.
+
 Everything an AI assistant (Claude or ChatGPT) needs to work fluently with the
 Inveniam platform through its API: setup for every environment, a playbook of
 endpoints and recipes, helper scripts, the platform skill, and one worked example.

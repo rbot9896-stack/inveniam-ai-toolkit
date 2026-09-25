@@ -17,6 +17,10 @@ asks a few questions and takes you through it one step at a time. You do two
 things yourself: create API credentials on the Inveniam website and paste them
 into a terminal window once. Nothing sensitive goes into the chat.
 
+**Best experience: use a desktop app** — the Claude desktop app (Cowork) or
+OpenAI's Codex app for ChatGPT. Either can open the toolkit folder and run
+things for you; the chat websites can only do the question-answering part.
+
 Repository: https://github.com/rbot9896-stack/inveniam-ai-toolkit (public, no
 credentials inside — updates land here, so prefer it over an emailed zip).
 Maintained platform skill: https://github.com/aberdellans/Agent_skill
@@ -65,16 +69,20 @@ You are guiding someone who may not be technical. For the whole conversation:
 ## §1. Intake — one question at a time
 
 1. *"Mac or Windows PC?"*
-2. *"Which assistant are we in — Claude or ChatGPT? If Claude: the desktop app
-   (Cowork) or the website?"*
+2. *"Which assistant are we in — Claude or ChatGPT? And the desktop app or the
+   website?"* Recommend the desktop app on either side (Claude desktop /
+   Cowork, or Codex for ChatGPT): it's the nicer experience and the only way to
+   do the API route in §6. If they're on the website, carry on — §5 works
+   there — and suggest installing the desktop app when they reach §6.
 3. *"Which Inveniam environments do you have a login for — sales
    (sales.inveniam.io), production (icp.inveniam.io), or both?"* Do sales first:
    demo data, safe to experiment on.
 4. *"Are you an owner/admin of your Claude or ChatGPT workspace, or a member?"*
 5. *"Do you want the conversational connector, the full API route, or both?"*
    Recommend both. One line each: the connector answers questions about deals
-   inside a chat; the API route (Claude Cowork only) is what reads extracted
-   data, downloads documents, checks anchoring and builds dashboards.
+   inside a chat; the API route (desktop app: Claude Cowork or Codex) is what
+   reads extracted data, downloads documents, checks anchoring and builds
+   dashboards.
 6. *"A few steps use the terminal — a text window where you paste a line and
    your computer runs it. Would you like me to explain what each one does
    before you run it (Guided), or just give you the lines (Quick)?"*
@@ -119,7 +127,8 @@ New-Item -ItemType Directory -Force "$env:USERPROFILE\dev" | Out-Null; git clone
 Expected: `cloned`. If it says the destination already exists and is not empty,
 rename the old `inveniam` folder aside and run it again, or use Option B.
 
-If you are Claude in Cowork with the computer linked, run the clone yourself,
+If you are Claude in Cowork with the computer linked, or Codex on the machine,
+run the clone yourself,
 then ask the user to **Add folder** → `dev/inveniam` so you can see it.
 
 **Option B — Download ZIP (no git needed).**
@@ -142,7 +151,8 @@ the download and are left untouched either way.
 
 Windows note: the helpers are bash/Python. Inside Claude Cowork they run
 unchanged, because Cowork's shell is a Linux environment that mounts this
-folder. They won't run in plain PowerShell, and don't need to.
+folder. Codex on Windows should be installed under WSL for the same reason.
+They won't run in plain PowerShell, and don't need to.
 
 ---
 
@@ -238,8 +248,9 @@ route in §6 doesn't use it at all.)
 **ChatGPT** — custom connectors need *Developer mode*, web app only
 (chatgpt.com, not the mobile app).
 
-- *Free / Go:* not available. Options: upgrade to Plus, or use Claude (Free
-  works there).
+- *Free / Go:* not available. Options: upgrade to Plus, use Claude Free for
+  the connector, or skip straight to §6 — Codex is included on Free and gives
+  them the API route, which is the more capable one anyway.
 - *Plus / Pro (personal):* the user does it themselves — *Settings → Apps* (or
   *Connectors*) *→ Advanced settings → Developer mode on*; if the toggle isn't
   there, look under *Settings → Security*. Then *Apps → Create*: name, server
@@ -255,8 +266,9 @@ route in §6 doesn't use it at all.)
 
 In a chat, select or @mention the app on the message that needs it.
 
-Tell ChatGPT users plainly: this connector is everything they get — §6 (API
-access, documents, extracted fields, dashboards) needs Claude on the desktop.
+Tell users plainly: the connector answers questions only. Documents,
+extracted fields, anchoring and dashboards come from §6, which needs a desktop
+app (Claude or Codex).
 
 Test: *"List the deals in the Inveniam sales environment."* Expected: 17
 deals, including The Meridian, Madison Ave Office, Coca-Cola, Fund II.
@@ -307,10 +319,28 @@ extracted fields, and the production one has been flaky. It's for questions.
 
 ---
 
-## §6. API route (Claude Cowork on the user's computer)
+## §6. API route (an assistant running on the user's computer)
 
-Needs the Claude desktop app. If they're in ChatGPT or Claude web, say so and
-stop here — §5 still works for them.
+This route needs an assistant that can run the helper scripts on the user's
+machine. Two qualify, and the toolkit works identically with either:
+
+| | Claude | ChatGPT |
+|---|---|---|
+| Tool | **Claude desktop app** (Cowork) | **Codex** desktop app (or Codex CLI) |
+| Plans | Pro, Max, Team, Enterprise (not Free) | every plan, including Free and Go (small allowance on Free) |
+| Get it | https://claude.ai/download | https://chatgpt.com/codex (desktop app) · CLI: `npm i -g @openai/codex` |
+| Windows | works as-is (Cowork's shell is Linux) | install under **WSL** (Ubuntu) so the bash helpers run |
+
+**Recommend the desktop app on both sides** — the chat website can't run
+anything on the computer, and the desktop apps are the comfortable way in for
+a non-technical user (link the computer, pick a folder, talk). If someone is on
+Claude Free and wants this route, Codex with their ChatGPT login is the free
+way to get it.
+
+**Using both Claude and Codex?** Nothing extra to do. Both open the same
+folder (`~/dev/inveniam`), and `inv.sh` reads the `.env` files that sit beside
+it — so the credentials from §4 are written once and shared. Don't make a second
+copy of the folder or the `.env` files per assistant; that's how they drift.
 
 Here the assistant runs the commands, not the user. In Guided mode, still say
 what each one does before running it: 2 checks the Inveniam API can be reached
@@ -318,19 +348,27 @@ from this computer; 3 proves the credentials file works by asking for one deal;
 4 downloads one deal's inventory and extracted data into `deals/`; 5 builds the
 example dashboard page from that data.
 
-1. Claude desktop → new Cowork task → **Link to this computer** → **Add
-   folder** → the base folder from §2. In Claude's shell it appears as
-   `~/mnt/inveniam` on both Mac and Windows.
-2. Reachability (Claude runs):
+1. Open the folder in the assistant.
+   - *Claude:* desktop app → new Cowork task → **Link to this computer** →
+     **Add folder** → `dev/inveniam`. In Claude's shell it appears as
+     `~/mnt/inveniam` (Mac and Windows alike); use that path below.
+   - *Codex:* desktop app → **Open project** → `dev/inveniam` (CLI:
+     `cd ~/dev/inveniam && codex`), sign in with the ChatGPT account when asked.
+     The path is the real one, `~/dev/inveniam`; use that below. Approve each
+     command when Codex asks.
+2. Reachability (assistant runs):
    `curl -s -o /dev/null -w "%{http_code}\n" -m 15 https://slsus01-api.inveniam.app/v2/api/docs/`
-   → `200`. If `000`, the org's allowlist blocks it: an admin adds
-   `slsus01-api.inveniam.app` and `api.inveniam.app` under *Claude Organization
-   settings → Capabilities → allowed domains*.
-3. Credentials (Claude runs):
-   `cd ~/mnt/inveniam && chmod 700 inv.sh tools/*.sh && INV_ENV=sales ./inv.sh GET "/v2/deals?limit=1"`
+   → `200`. If `000` in Claude on a Team/Enterprise plan, the org's allowlist
+   blocks it: an admin adds `slsus01-api.inveniam.app` and `api.inveniam.app`
+   under *Claude Organization settings → Capabilities → allowed domains*. (This
+   "Capabilities" setting is a network allowlist — nothing to do with the MCP
+   connector in §5.) In Codex, `000` means the machine itself can't reach the
+   host — check the network.
+3. Credentials (assistant runs, from the folder):
+   `chmod 700 inv.sh tools/*.sh && INV_ENV=sales ./inv.sh GET "/v2/deals?limit=1"`
    → JSON with `"items"` and `"meta"`. `401` → back to §3 step 2.
    `No credentials file` → §4 landed in the wrong place.
-4. First real pull (Claude runs):
+4. First real pull (assistant runs):
    ```
    INV_ENV=sales bash tools/fetch_deal.sh "The Meridian"
    python3 tools/deal_summary.py deals/the-meridian
@@ -341,11 +379,12 @@ example dashboard page from that data.
    ```
    python3 examples/meridian/meridian_data.py && python3 examples/meridian/build_meridian.py
    ```
-   → `examples/meridian/meridian.html`, which Claude publishes as an artifact.
-   Expected on the page: KPIs $208,300,000 · 6.00% · $694.33 · $11,950,796 ·
-   91.7% · $70,000,000; three amber `!` flags on the Q4 2025 balance sheet;
-   green ✓ on all 30 documents. Clicking any figure opens that field in
-   sales.inveniam.io (log in there once).
+   → `examples/meridian/meridian.html`. Claude publishes it as an artifact;
+   Codex opens it in the browser (`open examples/meridian/meridian.html` on
+   Mac). Expected on the page: KPIs $208,300,000 · 6.00% · $694.33 ·
+   $11,950,796 · 91.7% · $70,000,000; three amber `!` flags on the Q4 2025
+   balance sheet; green ✓ on all 30 documents. Clicking any figure opens that
+   field in sales.inveniam.io (log in there once).
 6. **Now read `API-PLAYBOOK.md`** and tell the user setup is complete and what
    they can ask for (§8 has examples).
 
