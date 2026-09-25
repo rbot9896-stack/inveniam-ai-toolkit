@@ -17,9 +17,10 @@ asks a few questions and takes you through it one step at a time. You do two
 things yourself: create API credentials on the Inveniam website and paste them
 into a terminal window once. Nothing sensitive goes into the chat.
 
-**Best experience: use a desktop app** — the Claude desktop app (Cowork) or
-OpenAI's Codex app for ChatGPT. Either can open the toolkit folder and run
-things for you; the chat websites can only do the question-answering part.
+**Best experience: use a desktop app** — the Claude desktop app (Cowork), or
+the ChatGPT desktop app switched to **Codex** mode. Either can open the toolkit
+folder and run things for you; the chat websites, and the ChatGPT app in plain
+ChatGPT mode, can only do the question-answering part.
 
 Repository: https://github.com/rbot9896-stack/inveniam-ai-toolkit (public, no
 credentials inside — updates land here, so prefer it over an emailed zip).
@@ -328,9 +329,9 @@ machine. Two qualify, and the toolkit works identically with either:
 
 | | Claude | ChatGPT |
 |---|---|---|
-| Tool | **Claude desktop app** (Cowork) | **Codex** desktop app (or Codex CLI) |
+| Tool | **Claude desktop app** (Cowork) | **ChatGPT desktop app, switched to Codex mode** (or Codex CLI) |
 | Plans | Pro, Max, Team, Enterprise (not Free) | every plan, including Free and Go (small allowance on Free) |
-| Get it | https://claude.ai/download | https://chatgpt.com/codex (desktop app) · CLI: `npm i -g @openai/codex` |
+| Get it | https://claude.ai/download | ChatGPT desktop app from https://chatgpt.com/download; Codex is the second entry in the mode picker at the top of the window (ChatGPT / **Codex**) · CLI: `npm i -g @openai/codex` |
 | Windows | works as-is (Cowork's shell is Linux) | works natively — needs **Python** (Microsoft Store → "Python 3", one click); no WSL |
 
 **Recommend the desktop app on both sides** — the chat website can't run
@@ -354,8 +355,10 @@ example dashboard page from that data.
    - *Claude:* desktop app → new Cowork task → **Link to this computer** →
      **Add folder** → `dev/inveniam`. In Claude's shell it appears as
      `~/mnt/inveniam` (Mac and Windows alike); use that path below.
-   - *Codex:* desktop app → **Open project** → `dev/inveniam` (CLI:
-     `cd ~/dev/inveniam && codex`), sign in with the ChatGPT account when asked.
+   - *Codex:* ChatGPT desktop app → mode picker at the top → **Codex** (not
+     ChatGPT — that mode can't run anything on the computer) → open
+     `dev/inveniam` as the project (CLI: `cd ~/dev/inveniam && codex`); it uses
+     the ChatGPT login already in the app.
      The path is the real one, `~/dev/inveniam`; use that below. Approve each
      command when Codex asks.
 2. Reachability (assistant runs):
