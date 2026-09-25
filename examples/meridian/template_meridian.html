@@ -41,6 +41,7 @@ h2{font-size:20px;letter-spacing:-.01em}
 .top nav a{text-decoration:none;font-size:12.5px;font-weight:500;color:var(--ink2);padding:5px 9px;border-radius:6px}
 .top nav a:hover{background:var(--surface2);color:var(--ink)}
 /* hero */
+.dedication{font-family:"Source Serif 4",Georgia,serif;font-style:italic;font-size:15px;color:var(--ink2);margin-bottom:10px}
 .hero{display:grid;grid-template-columns:1fr;gap:24px;padding-block:26px 8px;align-items:start}
 .hero p{margin:8px 0 0;color:var(--ink2);max-width:78ch;font-size:14.5px}
 .hero .facts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px 24px;font-size:13px;margin-top:16px}
@@ -117,7 +118,10 @@ tr.detail[hidden]{display:none}
 .folder h3{font-size:14px;display:flex;justify-content:space-between;align-items:baseline}
 .folder h3 small{font-size:11.5px;color:var(--muted);font-weight:500;font-family:"Instrument Sans",sans-serif}
 .folder ul{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:5px}
-.folder li{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;font-size:12.5px}
+.folder li{display:grid;grid-template-columns:1fr 72px 72px;gap:6px;align-items:center;font-size:12.5px}
+.folder li.hdr{font-size:9.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:4px;margin-bottom:2px}
+.folder li .col{display:flex;justify-content:center}
+.anch.no{background:var(--surface2);color:var(--muted);cursor:default}
 .folder li>a{text-decoration:none;color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .folder li>a:hover{color:var(--accent);text-decoration:underline}
 .chip{font-size:10.5px;font-weight:600;padding:1px 6px;border-radius:999px;background:var(--accent-soft);color:var(--accent);white-space:nowrap}
@@ -156,6 +160,7 @@ footer{margin-top:36px;padding-top:14px;border-top:1px solid var(--line);font-si
 <div class="wrap">
   <div class="hero">
     <div>
+      <div class="dedication">For Kerry Rudy</div>
       <div class="eyebrow" id="typeline"></div>
       <h2 style="font-size:26px;margin-top:4px" id="addr"></h2>
       <p id="desc"></p>
@@ -403,14 +408,15 @@ const S = DATA.stats;
 const AS = DATA.anchor_stats || {docs_anchored: 0, records: 0, succeed: 0, pending: 0, ledgers: []};
 $('#dr-src').innerHTML = `${S.docs} documents · ${S.folders} folders · ${S.artifact_docs} with extracted data · <span class="anch" style="cursor:default;vertical-align:-3px">✓</span> ${AS.docs_anchored} of ${S.docs} anchored on-chain (${AS.succeed} ledger records${AS.pending ? `, ${AS.pending} pending` : ''})`;
 const byF = {}; DATA.dataroom.forEach(d => (byF[d.folder] ||= []).push(d));
-$('#folders').innerHTML = Object.keys(byF).sort().map(f => `<div class="folder"><h3>${esc(f)}<small>${byF[f].length} file${byF[f].length > 1 ? 's' : ''}</small></h3><ul>` +
+$('#folders').innerHTML = Object.keys(byF).sort().map(f => `<div class="folder"><h3>${esc(f)}<small>${byF[f].length} file${byF[f].length > 1 ? 's' : ''}</small></h3><ul><li class="hdr"><span>File</span><span class="col">Extracted</span><span class="col">Anchored</span></li>` +
   byF[f].sort((a,b) => a.name.localeCompare(b.name)).map(d => {
     const A = d.anchoring || [], ok = A.filter(r => r.status === 'Succeed').length;
-    const badge = d.anchored ? `<button class="anch${d.pending ? ' part' : ''}" type="button" data-t="anch-${d.id}" title="Anchored on ${ok} ledger${ok > 1 ? 's' : ''}: ${A.filter(r => r.status === 'Succeed').map(r => r.ledger).join(', ')}${d.pending ? ` · ${d.pending} pending` : ''} — click for details">✓</button>` : `<span class="anch" style="background:var(--surface2);color:var(--muted)" title="No anchoring record">–</span>`;
+    const badge = d.anchored ? `<button class="anch${d.pending ? ' part' : ''}" type="button" data-t="anch-${d.id}" title="Anchored on ${ok} ledger${ok > 1 ? 's' : ''}: ${A.filter(r => r.status === 'Succeed').map(r => r.ledger).join(', ')}${d.pending ? ` · ${d.pending} pending` : ''} — click for details">✓</button>` : `<span class="anch no" title="No anchoring record">–</span>`;
+    const ext = d.fields ? `<span class="anch" style="cursor:default" title="Extracted: ${d.fields} fields">✓</span>` : `<span class="anch no" title="No extracted data">–</span>`;
     const detail = A.length ? `<div class="anchd" id="anch-${d.id}" hidden><table><thead><tr><th>Ledger</th><th>Status</th><th>Transaction</th><th>Anchored</th><th></th></tr></thead><tbody>` +
-      A.map(r => `<tr><td>${esc(r.ledger)}</td><td class="${r.status === 'Succeed' ? 'ok' : 'pend'}">${esc(r.status)}</td><td class="tx" title="${esc(r.tx)}">${esc(r.tx.length > 22 ? r.tx.slice(0,10) + '…' + r.tx.slice(-8) : r.tx)}</td><td>${esc((r.at || '').slice(0,10))}</td><td><a href="${esc(r.link)}" target="_blank" rel="noopener">record ↗</a></td></tr>`).join('') +
+      A.map(r => `<tr><td>${esc(r.ledger)}</td><td class="${r.status === 'Succeed' ? 'ok' : 'pend'}">${esc(r.status)}</td><td class="tx" title="${esc(r.tx || '')}">${r.tx ? esc(r.tx.length > 22 ? r.tx.slice(0,10) + '…' + r.tx.slice(-8) : r.tx) : '<span class="pend">pending</span>'}</td><td>${esc((r.at || '').slice(0,10))}</td><td>${r.link ? `<a href="${esc(r.link)}" target="_blank" rel="noopener">record ↗</a>` : ''}</td></tr>`).join('') +
       `</tbody></table><div style="color:var(--muted);margin-top:5px;word-break:break-all;white-space:normal">SHA-256 ${esc(A[0].checksum)}</div></div>` : '';
-    return `<li>${badge}<a href="${docUrl(d.id)}" target="_blank" rel="noopener" title="${esc(d.name)}">${esc(d.name.replace(/\.pdf$/,''))}</a>${d.fields ? `<span class="chip">${d.fields} fields</span>` : '<span class="chip none">no extraction</span>'}${detail}</li>`;
+    return `<li><a href="${docUrl(d.id)}" target="_blank" rel="noopener" title="${esc(d.name)}${d.fields ? ` · ${d.fields} extracted fields` : ''}">${esc(d.name.replace(/\.pdf$/,''))}</a><span class="col">${ext}</span><span class="col">${badge}</span>${detail}</li>`;
   }).join('') + '</ul></div>').join('');
 document.querySelectorAll('button.anch').forEach(b => b.addEventListener('click', () => { const t = document.getElementById(b.dataset.t); if (t) t.hidden = !t.hidden; }));
 
