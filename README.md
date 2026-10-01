@@ -30,4 +30,4 @@ No credentials are in this repository. They live only in `.env` files on each
 user's own computer, created during setup.
 
 Environments: production `api.inveniam.app` (confidential), sales
-`slsus01-api.inveniam.app` (demo data), demo-ce `demo-ce-api.inveniam.app` (demo data). Maintainer: Ryder Desenberg.
+`slsus01-api.inveniam.app` (demo data), demo-ce `demo-ce-api.inveniam.app` (treat as internal until confirmed). Maintainer: Ryder Desenberg.

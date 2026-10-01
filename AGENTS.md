@@ -15,7 +15,7 @@ a dashboard, answer a question about a data room), read `API-PLAYBOOK.md`
 first, then use `inv.py` / `tools/` as it describes.
 
 Standing rules: production content is confidential and never shareable; sales
-content is demo data. Every figure shown from extracted data links to its field
+content is demo data; demo-ce content is internal until confirmed. Every figure shown from extracted data links to its field
 in the viewer (host rewritten). Run the consistency checks in the playbook
 before presenting statement data and flag failures. Sequential API calls only.
 Keep replies short; ask before building anything large.
