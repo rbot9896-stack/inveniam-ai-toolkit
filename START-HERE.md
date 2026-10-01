@@ -302,8 +302,8 @@ Get-Content $f | ForEach-Object { $p = $_ -split '=',2; "$($p[0]) $($p[1].Length
 `.env` (no suffix). **Demo-CE:** `https://demo-ce-api.inveniam.app` and
 `.env.demo-ce`; then use `--env demo-ce` (or `INV_ENV=demo-ce`).
 Verified 2026-10-01: host reachable once allowlisted, `/v2/deals` returns 26
-real-estate deals. Treat demo-ce content as internal until Ryder confirms
-it is shareable.
+real-estate deals. demo-ce holds client data: confidential, never shareable,
+same handling as production.
 
 Expected: three lines, e.g. `INVENIAM_API_KEY 40 / INVENIAM_API_TOKEN 180 /
 INVENIAM_BASE_URL 34` — all above 0.

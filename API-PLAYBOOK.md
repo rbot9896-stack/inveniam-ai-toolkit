@@ -33,7 +33,7 @@ and `Authorization: <token>` → `{"token": <jwt>}`; every call then sends
 | REST base | `https://api.inveniam.app` | `https://slsus01-api.inveniam.app` | `https://demo-ce-api.inveniam.app` |
 | Viewer host to use in links | `icp.inveniam.io` (API says `icp-v1`) | `sales.inveniam.io` (API says `sales-v1`) | not confirmed yet |
 | MCP connector | ask Ryder | `https://sales-api.inveniam.io/mcp` (connector only; host not allowlisted for direct calls) | none known |
-| Content | real, confidential | 17 demo deals, shareable | 26 real-estate deals, all "Coming Soon" (verified 2026-10-01); content classification not confirmed — treat as internal |
+| Content | real, confidential | 17 demo deals, shareable | 26 real-estate deals, all "Coming Soon" (verified 2026-10-01); client data — confidential, never shareable |
 | Spec | `GET /v2/api/docs/swagger-ui-init.js` (~640 KB — grep it; `/v2/api/docs-json` is 403) | same path | same path |
 
 Working rules:
