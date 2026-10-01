@@ -20,6 +20,7 @@ minutes per environment, and adds the headers. You never see credential values.
 cd ~/mnt/inveniam
 python3 inv.py GET "/v2/deals?page=1&limit=100"           # production (.env)   (Windows: python inv.py …)
 python3 inv.py --env sales GET "/v2/deals?page=1&limit=100"   # sales (.env.sales); INV_ENV=sales also works
+python3 inv.py --env demo-ce GET "/v2/deals?limit=10"         # demo-ce (.env.demo-ce)
 python3 inv.py POST "/v2/dataroom/file-veracity/initiate" -d '{"fileId":"…"}'   # -d implies JSON; -H "k: v" and -o FILE also supported
 ```
 
@@ -27,13 +28,13 @@ Under the hood: `GET /v2/api-keys/auth/token` with headers `x-api-key: <key>`
 and `Authorization: <token>` → `{"token": <jwt>}`; every call then sends
 `Authorization: Bearer <jwt>` and `x-api-key`.
 
-| | Production | Sales / demo |
-|---|---|---|
-| REST base | `https://api.inveniam.app` | `https://slsus01-api.inveniam.app` |
-| Viewer host to use in links | `icp.inveniam.io` (API says `icp-v1`) | `sales.inveniam.io` (API says `sales-v1`) |
-| MCP connector | ask Ryder | `https://sales-api.inveniam.io/mcp` (connector only; host not allowlisted for direct calls) |
-| Content | real, confidential | 17 demo deals, shareable |
-| Spec | `GET /v2/api/docs/swagger-ui-init.js` (~640 KB — grep it; `/v2/api/docs-json` is 403) | same path |
+| | Production | Sales / demo | Demo-CE |
+|---|---|---|---|
+| REST base | `https://api.inveniam.app` | `https://slsus01-api.inveniam.app` | `https://demo-ce-api.inveniam.app` |
+| Viewer host to use in links | `icp.inveniam.io` (API says `icp-v1`) | `sales.inveniam.io` (API says `sales-v1`) | not confirmed yet |
+| MCP connector | ask Ryder | `https://sales-api.inveniam.io/mcp` (connector only; host not allowlisted for direct calls) | none known |
+| Content | real, confidential | 17 demo deals, shareable | demo data |
+| Spec | `GET /v2/api/docs/swagger-ui-init.js` (~640 KB — grep it; `/v2/api/docs-json` is 403) | same path | same path |
 
 Working rules:
 - **Sequential calls only.** Parallel `inv.py` calls from one shell return empty bodies.

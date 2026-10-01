@@ -3,6 +3,7 @@
 
     python3 inv.py GET "/v2/deals?page=1&limit=10"                 # production  (.env)
     INV_ENV=sales python3 inv.py GET "/v2/deals?limit=10"           # sales       (.env.sales)
+    INV_ENV=demo-ce python3 inv.py GET "/v2/deals?limit=10"         # demo-ce     (.env.demo-ce)
     python3 inv.py --env sales GET "/v2/deals?limit=10"             # same, without an env var
     python3 inv.py POST /v2/dataroom/file-veracity/initiate -d '{"fileId":"..."}'
     python3 inv.py GET /v2/dataroom/download-file/<id> -o file.pdf

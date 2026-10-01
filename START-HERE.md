@@ -144,7 +144,7 @@ Summarise the plan in three lines, then start.
 | Pulled deals | `~/dev/inveniam/deals/<deal-slug>/` (created automatically) | same |
 | Worked example | `~/dev/inveniam/examples/meridian/` | same |
 | Claude skill | `~/dev/inveniam/skill/inveniam/SKILL.md` (installed in §5b) | same |
-| Credentials | `~/dev/inveniam/.env.sales`, `~/dev/inveniam/.env` | same names, same folder |
+| Credentials | `~/dev/inveniam/.env.sales`, `~/dev/inveniam/.env`, `~/dev/inveniam/.env.demo-ce` | same names, same folder |
 
 Pick **one** of the two ways below. Both end with the toolkit's files sitting
 directly in the base folder (no extra folder in between).
@@ -216,13 +216,15 @@ Mac / Cowork / Codex on Mac:
 curl -s -o /dev/null -w "%{http_code}\n" -m 15 https://slsus01-api.inveniam.app/v2/api/docs/
 ```
 Codex on Windows (PowerShell): the same line with `curl.exe` in place of `curl`.
-For production, repeat with `https://api.inveniam.app/v2/api/docs/`.
+For production, repeat with `https://api.inveniam.app/v2/api/docs/`; for demo-ce,
+`https://demo-ce-api.inveniam.app/v2/api/docs/`.
 
 Expected: `200`.
 
 If `000` (or it hangs):
 - **Claude on a Team/Enterprise plan:** the organisation's allowlist blocks the
-  host. An Owner adds `slsus01-api.inveniam.app` and `api.inveniam.app` under
+  host. An Owner adds `slsus01-api.inveniam.app`, `api.inveniam.app` (and
+  `demo-ce-api.inveniam.app` if they use demo-ce) under
   *Claude Organization settings → Capabilities → allowed domains*. Give the
   user that sentence to forward, and pause here until it's done. (This
   "Capabilities" setting is a network allowlist — nothing to do with the MCP
@@ -244,6 +246,7 @@ Only proceed to §3 on `200`.
 |---|---|---|
 | Sales / demo | https://sales.inveniam.io | `https://slsus01-api.inveniam.app` |
 | Production | https://icp.inveniam.io | `https://api.inveniam.app` |
+| Demo-CE | ask Ryder | `https://demo-ce-api.inveniam.app` |
 
 1. Log in → **Settings → Public API Keys → Create API key.** Name it
    `ai-<yourname>`.
@@ -296,7 +299,8 @@ Get-Content $f | ForEach-Object { $p = $_ -split '=',2; "$($p[0]) $($p[1].Length
 ```
 
 **Production:** same snippet with `https://api.inveniam.app` and file name
-`.env` (no suffix).
+`.env` (no suffix). **Demo-CE:** `https://demo-ce-api.inveniam.app` and
+`.env.demo-ce`; then use `--env demo-ce` (or `INV_ENV=demo-ce`).
 
 Expected: three lines, e.g. `INVENIAM_API_KEY 40 / INVENIAM_API_TOKEN 180 /
 INVENIAM_BASE_URL 34` — all above 0.

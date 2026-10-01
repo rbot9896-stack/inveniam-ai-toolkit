@@ -6,7 +6,7 @@ says anything like "set me up", "get started", "walk me through this":
 1. Read `START-HERE.md` in this folder and follow it exactly — it is written
    for you. Begin at §0, then the intake in §1, one question at a time.
 2. Never ask for, print, echo or store Inveniam API keys or tokens. They go
-   into `.env` / `.env.sales` here via the terminal snippet in §4 only.
+   into `.env` / `.env.sales` / `.env.demo-ce` here via the terminal snippet in §4 only.
 3. Once setup is complete, read `API-PLAYBOOK.md` and `skill/inveniam/SKILL.md`;
    from then on those are your reference for anything Inveniam-related.
 
