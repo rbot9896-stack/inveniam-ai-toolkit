@@ -148,16 +148,15 @@ Flatten to rows `{doc, docId, ctype, form, rec, field, value, page, box, bb, url
   appraisal cap rate is `Value Cap Rate` in two quarters and `OCR Current
   Quarter` in the other two; investor/fund tables of a capital account
   statement swap names between quarters). Select by field name across
-  aliases, and keep a link only when the extracted value equals the figure
-  you show.
+  aliases, and check the value before citing a field as the source.
 Content types seen: APPRAISAL, INCOME_STATEMENT, BALANCE_SHEET, RENT_ROLL,
 LEASE, CREDIT_AGREEMENT. Not every document has an artifact (decks, memos, cap
 tables, ESA/title/zoning reports usually don't).
 
 **Extraction can be wrong while looking right.** Example: a balance sheet's
 Summary form took its totals from the January column instead of December. Before
-presenting statement data, run the consistency checks in recipe C and flag
-failures visibly.
+relying on statement data, run the consistency checks in recipe C and tell the
+user about any failure.
 
 ## 5. On-chain anchoring
 
@@ -226,38 +225,28 @@ link.
   interest income = borrower interest expense.
 - Units and scale: check the extracted `Units` against the PDF (seen: "In
   Actuals" extracted where the statement says thousands).
-Flag every failure on the page itself (badge + explanation + links to both
-values). `examples/meridian/meridian_data.py` has a working implementation of
-the balance-sheet check.
+Report every failure with both values and their field links; don't silently
+pick one.
 
 **D. Anchoring audit.** Taxonomy call per document (sequential) → table of
 document / ledgers Succeed / Pending / checksum. `fetch_deal.py` already saves
 this as `anchoring.json`; `deal_summary.py` prints it.
 
-**E. Provenance dashboard for any deal.** Pull (A) → select figures by
-(document, form, field, record) into `{v, u, p, d}` cells → HTML template where
-every figure is `<a class="cell" href=url>` with a hover showing document + page
-→ rewrite viewer host → run C and render flags → add ✓ anchoring badges from D
-→ publish. `examples/meridian/` is the complete reference implementation
-(`meridian_data.py` → `build_meridian.py` + `template_meridian.html`); copy it
-and change the field selection for the deal type at hand.
-
-**F. Integrity check.** `POST /v2/dataroom/file-veracity/initiate` with a
+**E. Integrity check.** `POST /v2/dataroom/file-veracity/initiate` with a
 `fileId` → poll `…/status/{jobId}` until it resolves → report each check.
 
-**G. Read a document.** Download to the shell's scratch area, extract what's
+**F. Read a document.** Download to the shell's scratch area, extract what's
 needed (text, a table, a figure), delete the file, cite page numbers.
 
-**H. Workflow review.** List workflows → tasks → `get task` for detail → post a
+**G. Workflow review.** List workflows → tasks → `get task` for detail → post a
 comment (`parentId` to reply). Advance status one allowed hop at a time.
 
 ## 8. Handling rules
 
-- Production is confidential: no holder names, no sharing outside Inveniam;
-  pages built from it are internal. Sales is demo data and shareable.
-- Every figure from extracted data links to its field. Every document listed
-  links to the viewer.
-- Statement data gets recipe C before it's shown; failures are flagged, not hidden.
+- Production and demo-ce are confidential: no holder names, no sharing outside
+  Inveniam; anything built from them is internal. Sales is demo data and shareable.
+- When you quote a number from extracted data, give its field link (recipe B).
+- Statement data gets recipe C before it's relied on; failures are reported, not hidden.
 - Preview-and-confirm before any destructive or permission call.
 - Say what you couldn't verify. Viewer hosts, deal images (`slsus01-cdn`) and
   block explorers aren't reachable from here — the user checks those in a browser.
@@ -266,10 +255,9 @@ comment (`parentId` to reply). Advance status one allowed hop at a time.
 
 - **The Meridian** (`26ca3be5-ac61-4d1e-900d-6605ad22fb1f`), real-estate,
   Chicago Class A office tower: 30 documents / 24 extracted / 4,293 fields;
-  30 of 30 anchored (62 ledger records, appraisals on 7 chains). The worked
-  example in `examples/meridian/` (recipes C, D and E end to end; 3 extraction
-  flags on the Q4 2025 balance sheet, whose Summary form took totals from the
-  January column). Nothing about it is specific to the toolkit.
+  30 of 30 anchored (62 ledger records, appraisals on 7 chains). The quickest
+  first pull (about a minute). Its Q4 2025 balance-sheet Summary form took
+  totals from the January column — a good test of recipe C.
 - **Halcyon Ridge Direct Lending Fund I** (`0d5bde56-4820-4c20-a041-44ddc3f3e232`),
   fabricated private-credit fund, status Coming Soon: ~160 documents over 8
   quarters (LPA, capital calls, distributions, schedules of investments,
@@ -282,7 +270,7 @@ comment (`parentId` to reply). Advance status one allowed hop at a time.
   real credit agreements from SEC filings plus compliance certificates and
   statements for one borrower. Its deal-level artifacts list fails; per
   document works. Total Commitment is blank on 21 agreements and 16 of 17
-  certificates have no values — good material for data-quality flags.
+  certificates have no values.
 - Others: Madison Ave Office, Main St Apartments, ten further real-estate deals
   (Brickworks, Cedar Hill, Seaport Row, …); Mount Fuji XV LP, Mount Kita XV,
   Fund II, Fund 1, Lake Geneva XV, Inveniam Private Equity Fund IV (funds);

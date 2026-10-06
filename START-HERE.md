@@ -3,10 +3,8 @@
 **What this is.** Everything needed for an AI assistant (Claude or ChatGPT) to
 work fluently with the Inveniam platform through its API: read deals and data
 rooms, pull every extracted field with a link to its source, verify on-chain
-anchoring, run integrity checks, drive workflows, and build pages where every
-number clicks through to the document it came from. One deal (The Meridian, in
-the sales environment) is included as a worked example; the point is the
-capability, not that deal.
+anchoring, run integrity checks, drive workflows, upload documents — whatever
+the user needs the API for. Setup is the same for every purpose.
 
 **How to use it.** In a new conversation with Claude or ChatGPT, paste:
 
@@ -64,7 +62,7 @@ them create API keys yet — it would only be redone):
 > `dev/inveniam` in your home folder. Then paste the same message you sent me.
 >
 > If you only want to *ask questions* about deals and don't need documents,
-> extracted data or dashboards, stay here — that's §5, and it works in chat.
+> or extracted data, stay here — that's §5, and it works in chat.
 
 The one thing plain chat *can* do is §5 (the connector). If the user is in
 chat and asks only for that, do §5 and nothing else.
@@ -124,8 +122,8 @@ You are guiding someone who may not be technical. For the whole conversation:
 5. *"Do you want the conversational connector, the full API route, or both?"*
    Recommend both. One line each: the connector answers questions about deals
    inside a chat; the API route (desktop app: Claude Cowork or Codex) is what
-   reads extracted data, downloads documents, checks anchoring and builds
-   dashboards.
+   reads extracted data, downloads documents, checks anchoring and anything
+   else the API can do.
 6. *"A few steps use the terminal — a text window where you paste a line and
    your computer runs it. Would you like me to explain what each one does
    before you run it (Guided), or just give you the lines (Quick)?"*
@@ -142,7 +140,6 @@ Summarise the plan in three lines, then start.
 | Base | `~/dev/inveniam` | `%USERPROFILE%\dev\inveniam` |
 | Helpers | `~/dev/inveniam/tools/` | `…\dev\inveniam\tools\` |
 | Pulled deals | `~/dev/inveniam/deals/<deal-slug>/` (created automatically) | same |
-| Worked example | `~/dev/inveniam/examples/meridian/` | same |
 | Claude skill | `~/dev/inveniam/skill/inveniam/SKILL.md` (installed in §5b) | same |
 | Credentials | `~/dev/inveniam/.env.sales`, `~/dev/inveniam/.env`, `~/dev/inveniam/.env.demo-ce` | same names, same folder |
 
@@ -185,8 +182,7 @@ then ask the user to **Add folder** → `dev/inveniam` so you can see it.
 **Check** — Mac: `ls ~/dev/inveniam ~/dev/inveniam/tools` · Windows:
 `Get-ChildItem "$env:USERPROFILE\dev\inveniam" -Recurse -Name`
 Expected: `inv.py`, `inv.sh`, `API-PLAYBOOK.md`, `START-HERE.md`, `README.md`, `AGENTS.md`, `CLAUDE.md`,
-a `tools` folder with `fetch_deal.py` and `deal_summary.py`, an `examples`
-folder, a `skill` folder — and **no** `inveniam-ai-toolkit-main` folder nested inside.
+a `tools` folder with `fetch_deal.py` and `deal_summary.py`, a `skill` folder — and **no** `inveniam-ai-toolkit-main` folder nested inside.
 
 **Updating later** — Option A: `cd ~/dev/inveniam && git pull`. Option B:
 download again and replace the files. Your `.env` credential files are not in
@@ -357,7 +353,7 @@ route in §6 doesn't use it at all.)
 In a chat, select or @mention the app on the message that needs it.
 
 Tell users plainly: the connector answers questions only. Documents,
-extracted fields, anchoring and dashboards come from §6, which needs a desktop
+extracted fields and anchoring come from §6, which needs a desktop
 app (Claude or Codex).
 
 Test: *"List the deals in the Inveniam sales environment."* Expected: about
@@ -395,10 +391,10 @@ knowledge, and paste this as its instructions:
 > Reach the API through ~/dev/inveniam/inv.py on the user's computer (request
 > access to that folder if it isn't connected); don't rely on the connector.
 > Never ask for, print or copy API keys or tokens. Production content is
-> confidential and never shareable; sales content is demo data. Every figure
-> shown from extracted data must link to its field in the viewer, host
-> rewritten. Run the consistency checks in the playbook before presenting
-> statement data and flag anything that fails on the page. Keep responses
+> confidential and never shareable; sales content is demo data. When quoting
+> a number from extracted data, give its field link in the viewer, host
+> rewritten. Run the consistency checks in the playbook before relying on
+> statement data and report anything that fails. Keep responses
 > terse; ask before building something large.
 
 Every conversation started in that project then has the playbook and skill
@@ -435,8 +431,7 @@ copy of the folder or the `.env` files per assistant; that's how they drift.
 Here the assistant runs the commands, not the user. In Guided mode, still say
 what each one does before running it: 2 re-checks the Inveniam API can be
 reached (see §2b); 3 proves the credentials file works by asking for one deal;
-4 downloads one deal's inventory and extracted data into `deals/`; 5 builds the
-example dashboard page from that data.
+4 downloads one deal's inventory and extracted data into `deals/`.
 
 1. Open the folder in the assistant.
    - *Claude:* desktop app → new Cowork task → **Link to this computer** →
@@ -467,17 +462,7 @@ example dashboard page from that data.
    it's generic: `python3 tools/fetch_deal.py --env sales "Madison"`. Big deals
    (150+ documents) take several minutes; if a pull is interrupted, run the
    same command again — it resumes from what it already saved.
-5. Optional — the worked dashboard example:
-   ```
-   python3 examples/meridian/meridian_data.py && python3 examples/meridian/build_meridian.py
-   ```
-   → `examples/meridian/meridian.html`. Claude publishes it as an artifact;
-   Codex opens it in the browser (`open examples/meridian/meridian.html` on
-   Mac). Expected on the page: KPIs $208,300,000 · 6.00% · $694.33 ·
-   $11,950,796 · 91.7% · $70,000,000; three amber `!` flags on the Q4 2025
-   balance sheet; green ✓ on all 30 documents. Clicking any figure opens that
-   field in sales.inveniam.io (log in there once).
-6. **Now read `API-PLAYBOOK.md`** and tell the user setup is complete and what
+5. **Now read `API-PLAYBOOK.md`** and tell the user setup is complete and what
    they can ask for (§8 has examples).
 
 ---
@@ -506,17 +491,16 @@ example dashboard page from that data.
 - *"Pull `<deal>` and give me the data-room inventory with anchoring status."*
 - *"Which documents in `<deal>` are anchored on which chains? Show the transaction ids."*
 - *"Pull the extracted fields from `<document>` and show each one with its page link."*
-- *"Build a dashboard for `<deal>` where every figure links to its source."*
+- *"Upload these PDFs to `<deal>` and tell me when extraction finishes."*
 - *"Check `<statement>` against its own detail table and flag inconsistencies."*
 - *"Run an integrity (veracity) check on `<document>`."*
 - *"Show the workflow tasks on `<deal>` and who's responsible."*
 - *"Download `<document>`, extract X, then delete the copy."*
 
 Standing rules the assistant follows: credentials never leave the `.env` files;
-every figure shown from extracted data links to its field in the viewer;
+numbers quoted from extracted data come with their field link;
 production content stays internal, sales content is shareable; statement data
-is arithmetic- and cross-checked before it's presented, with failures flagged
-on the page; destructive or permission-changing API calls are previewed and
+is arithmetic- and cross-checked before it's relied on, with failures reported; destructive or permission-changing API calls are previewed and
 approved first.
 
 Owner: Ryder Desenberg — helpers, production MCP URL, and the Claude project

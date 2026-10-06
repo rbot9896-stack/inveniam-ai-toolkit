@@ -9,7 +9,7 @@ helpers on your machine and share the same credentials folder.
 
 Everything an AI assistant (Claude or ChatGPT) needs to work fluently with the
 Inveniam platform through its API: setup for every environment, a playbook of
-endpoints and recipes, helper scripts, the platform skill, and one worked example.
+endpoints and recipes, helper scripts, and the platform skill.
 
 | Start with | Who it's for |
 |---|---|
@@ -18,7 +18,6 @@ endpoints and recipes, helper scripts, the platform skill, and one worked exampl
 | `API-PLAYBOOK.md` | the assistant, after setup — how to call the API, what comes back, recipes |
 | `skill/inveniam/SKILL.md` | the platform skill (maintained at https://github.com/aberdellans/Agent_skill) |
 | `inv.py`, `tools/` | API helper; pull any deal, summarise inventory / extraction / anchoring — plain Python, runs on Mac, Windows and Linux (`.sh` files are wrappers) |
-| `examples/meridian/` | worked example: a provenance dashboard where every figure links to its source field |
 
 Get the files — either:
 - `git clone https://github.com/rbot9896-stack/inveniam-ai-toolkit.git ~/dev/inveniam` (then `git pull` for updates), or

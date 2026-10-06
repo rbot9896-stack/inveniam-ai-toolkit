@@ -10,12 +10,12 @@ says anything like "set me up", "get started", "walk me through this":
 3. Once setup is complete, read `API-PLAYBOOK.md` and `skill/inveniam/SKILL.md`;
    from then on those are your reference for anything Inveniam-related.
 
-For any other Inveniam task in this folder (pull a deal, check anchoring, build
-a dashboard, answer a question about a data room), read `API-PLAYBOOK.md`
+For any other Inveniam task in this folder (pull a deal, check anchoring, upload
+documents, answer a question about a data room), read `API-PLAYBOOK.md`
 first, then use `inv.py` / `tools/` as it describes.
 
 Standing rules: production and demo-ce content (client data) are confidential and
-never shareable; sales content is demo data. Every figure shown from extracted data links to its field
+never shareable; sales content is demo data. Numbers quoted from extracted data come with their field link
 in the viewer (host rewritten). Run the consistency checks in the playbook
 before presenting statement data and flag failures. Sequential API calls only.
 Keep replies short; ask before building anything large.
