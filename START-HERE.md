@@ -27,7 +27,7 @@ Repository: https://github.com/rbot9896-stack/inveniam-ai-toolkit (public, no
 credentials inside — updates land here, so prefer it over an emailed zip).
 Maintained platform skill: https://github.com/aberdellans/Agent_skill
 
-Prepared by Ryder Desenberg (Inveniam), 2026-09-24.
+Prepared by Ryder Desenberg (Inveniam). Last tested end to end 2026-10-05.
 
 ---
 
@@ -184,7 +184,7 @@ then ask the user to **Add folder** → `dev/inveniam` so you can see it.
 
 **Check** — Mac: `ls ~/dev/inveniam ~/dev/inveniam/tools` · Windows:
 `Get-ChildItem "$env:USERPROFILE\dev\inveniam" -Recurse -Name`
-Expected: `inv.py`, `inv.sh`, `API-PLAYBOOK.md`, `START-HERE.md`, `README.md`,
+Expected: `inv.py`, `inv.sh`, `API-PLAYBOOK.md`, `START-HERE.md`, `README.md`, `AGENTS.md`, `CLAUDE.md`,
 a `tools` folder with `fetch_deal.py` and `deal_summary.py`, an `examples`
 folder, a `skill` folder — and **no** `inveniam-ai-toolkit-main` folder nested inside.
 
@@ -274,7 +274,8 @@ your credentials, so they go straight from your clipboard into a file on your
 own disk, and the helper scripts read them from there. Say this in every mode
 before giving the snippet.
 
-**Mac — Terminal — sales:**
+**Mac — Terminal — sales:** (written for zsh, the Mac default; if the first line
+answers `read: bad option`, type `zsh`, press Return, and paste again)
 ```zsh
 read -rs "K?Inveniam SALES API key: "; echo
 read -rs "T?Inveniam SALES API token: "; echo
@@ -359,8 +360,8 @@ Tell users plainly: the connector answers questions only. Documents,
 extracted fields, anchoring and dashboards come from §6, which needs a desktop
 app (Claude or Codex).
 
-Test: *"List the deals in the Inveniam sales environment."* Expected: 17
-deals, including The Meridian, Madison Ave Office, Coca-Cola, Fund II.
+Test: *"List the deals in the Inveniam sales environment."* Expected: about
+28 deals, including The Meridian, Madison Ave Office, Coca-Cola, Fund II.
 
 ### §5b. Install the Inveniam skill (Claude only — do this for everyone on Claude)
 
@@ -458,11 +459,14 @@ example dashboard page from that data.
    python3 tools/fetch_deal.py --env sales "The Meridian"
    python3 tools/deal_summary.py deals/the-meridian
    ```
-   → after the pull: `The Meridian: 30 documents, 8 folders, 24 artifacts, 4293
-   cells, 3201 with viewer links` and `30 documents with anchoring records`;
-   then a Markdown table of 30 documents with field counts and ✓ anchoring
-   ledgers. Try another deal by title to show it's generic:
-   `python3 tools/fetch_deal.py --env sales "Madison"`.
+   → progress lines, then `The Meridian: 24 of 30 documents with extraction,
+   4,293 fields (3,208 filled, 3,208 with viewer links, 3,140 with a highlight
+   box)` and `anchoring: 30 of 30 documents anchored, 62 ledger records`; then a
+   Markdown table of 30 documents with filled fields, highlights and ✓
+   anchoring ledgers. Takes about a minute. Try another deal by title to show
+   it's generic: `python3 tools/fetch_deal.py --env sales "Madison"`. Big deals
+   (150+ documents) take several minutes; if a pull is interrupted, run the
+   same command again — it resumes from what it already saved.
 5. Optional — the worked dashboard example:
    ```
    python3 examples/meridian/meridian_data.py && python3 examples/meridian/build_meridian.py
@@ -487,6 +491,8 @@ example dashboard page from that data.
 | `permissionsError` | Token's role can't see that resource → higher role on the deal |
 | `No credentials file` | Wrong folder or name → `.env.sales` directly in the base folder |
 | Empty response / 0-byte file | Intermittent API behaviour → rerun; never run calls in parallel |
+| `fetch_deal.py` ends with `INCOMPLETE` (exit 3), or was interrupted | Network hiccup → run the same command again; it resumes and fills the gaps |
+| `ambiguous, matches: …` from `fetch_deal.py` | Title fragment matches several deals → use more of the title, or the deal id |
 | `spawn E2BIG` in Cowork | Command too long → Claude writes a script file and runs it |
 | Field link opens a login page | Expected → log in to that environment's viewer once |
 | Connector shows no tools / drops | Known flakiness → use §6 for anything that matters |
